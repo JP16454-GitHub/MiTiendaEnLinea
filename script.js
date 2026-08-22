@@ -41,7 +41,8 @@ let currentConfig = { ...defaultConfig };
  * Define la URL base de la API backend. 
  * En producción, esta URL debería cambiar a la del servidor real.
  *********************/
-const API_URL = "https://localhost:7171/api";
+/*const API_URL = "https://localhost:7171/api";*/
+const API_URL = "http://mitiendaenlinea.runasp.net/api";
 
 
 /*********************
