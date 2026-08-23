@@ -259,6 +259,11 @@ async function apiRequest(endpoint, options = {}) {
 
     if (!response.ok) {
 
+      console.error("❌ HTTP Status:", response.status);
+      console.error("❌ URL:", `${API_URL}${endpoint}`);
+      console.error("❌ Respuesta completa:", data);
+      console.error("❌ Respuesta original:", text);
+
       if (
         response.status === 401 ||
         response.status === 403
@@ -280,6 +285,7 @@ async function apiRequest(endpoint, options = {}) {
       throw new Error(
         data.message ||
         data.error ||
+        data.title ||
         `Error ${response.status}`
       );
     }
@@ -1309,7 +1315,7 @@ async function handleCheckout(event) {
     const checkoutPayload = {
       userId: currentUser.id,
 
-      items: JSON.stringify(cart),
+      items: cart,
 
       total: total + shipping,
 
