@@ -264,23 +264,28 @@ async function apiRequest(endpoint, options = {}) {
       console.error("❌ Respuesta completa:", data);
       console.error("❌ Respuesta original:", text);
 
-      if (
-        response.status === 401 ||
-        response.status === 403
-      ) {
+    if (response.status === 401) {
 
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("token");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("token");
 
-        currentUser = null;
+      currentUser = null;
 
-        showToast(
-          "Sesión expirada. Inicia sesión nuevamente.",
-          "error"
-        );
+      showToast(
+        "Sesión expirada. Inicia sesión nuevamente.",
+        "error"
+      );
 
-        setActiveTab("auth");
-      }
+      setActiveTab("auth");
+    }
+
+    if (response.status === 403) {
+
+      showToast(
+        "No tienes permisos para realizar esta operación.",
+        "error"
+      );
+    }
 
       throw new Error(
         data.message ||
@@ -2544,6 +2549,60 @@ function showOrderDetail(order) {
     "detail-status"
   ).value =
     order.status || "Pendiente";
+
+  const statusSelect =
+    document.getElementById("detail-status");
+
+  if (statusSelect) {
+
+    statusSelect.onchange = async function () {
+
+      const newStatus = this.value;
+
+      console.log(
+        `🔄 Pedido #${order.id} ${order.status} → ${newStatus}`
+      );
+
+      try {
+
+        this.disabled = true;
+
+        await updateOrderStatus(
+          order.id,
+          newStatus
+        );
+
+        // Actualizar el objeto local
+        order.status = newStatus;
+
+        // Actualizar también el pedido dentro de adminOrders
+        const index =
+          adminOrders.findIndex(
+            o => String(o.id) === String(order.id)
+          );
+
+        if (index !== -1) {
+          adminOrders[index].status = newStatus;
+        }
+
+      } catch (error) {
+
+        console.error(
+          "❌ Error cambiando estado:",
+          error
+        );
+
+        // Regresar al estado anterior
+        this.value =
+          order.status || "Pendiente";
+
+      } finally {
+
+        this.disabled = false;
+      }
+    };
+  }
+
 
   document.getElementById(
     "detail-total"
