@@ -458,6 +458,10 @@ async function handleLogin(event) {
 
     currentUser = result.user;
 
+    console.log("LOGIN RESULT:", result);
+    console.log("USER:", result.user);
+    console.log("ROLE:", result.user?.role);
+
     localStorage.setItem(
       "currentUser",
       JSON.stringify(currentUser)
@@ -517,56 +521,117 @@ function handleLogout() {
  * UI USER           *
  *********************/
 function updateUIForUser() {
-  const userSection =
-    document.getElementById("user-section");
 
-  const userName =
-    document.getElementById("user-name");
+    const userSection =
+        document.getElementById("user-section");
 
-  const userRole =
-    document.getElementById("user-role");
+    const userName =
+        document.getElementById("user-name");
 
-  const tabAdmin =
-    document.getElementById("tab-admin");
+    const userRole =
+        document.getElementById("user-role");
 
-  const tabUsers =
-    document.getElementById("tab-users");
+    const tabAdmin =
+        document.getElementById("tab-admin");
 
-  const tabProducts =
-    document.getElementById("tab-products-admin");
+    const tabUsers =
+        document.getElementById("tab-users");
 
-  if (currentUser) {
-    if (userSection) {
-      userSection.style.display = "flex";
+    const tabProducts =
+        document.getElementById("tab-products-admin");
+
+
+    if (currentUser) {
+
+        // ==========================================
+        // NORMALIZAR ROL
+        // ==========================================
+
+        const role =
+            (currentUser.role || "")
+                .toString()
+                .trim()
+                .toLowerCase();
+
+        const isAdmin =
+            role === "admin";
+
+
+        // ==========================================
+        // USUARIO
+        // ==========================================
+
+        if (userSection) {
+            userSection.style.display = "flex";
+        }
+
+
+        // ==========================================
+        // NOMBRE
+        // ==========================================
+
+        if (userName) {
+
+            userName.textContent =
+                currentUser.nombre ||
+                currentUser.email ||
+                "Usuario";
+        }
+
+
+        // ==========================================
+        // ROL
+        // ==========================================
+
+        if (userRole) {
+
+            userRole.textContent =
+                isAdmin
+                    ? "Administrador"
+                    : "Cliente";
+        }
+
+
+        // ==========================================
+        // PERMISOS
+        // ==========================================
+
+        if (tabAdmin) {
+            tabAdmin.disabled = !isAdmin;
+        }
+
+        if (tabUsers) {
+            tabUsers.disabled = !isAdmin;
+        }
+
+        if (tabProducts) {
+            tabProducts.disabled = !isAdmin;
+        }
+
+
+        console.log("👤 Usuario:", currentUser);
+        console.log("🔐 Rol:", currentUser.role);
+        console.log("👑 Es administrador:", isAdmin);
+
+
+    } else {
+
+        if (userSection) {
+            userSection.style.display = "none";
+        }
+
+        if (tabAdmin) {
+            tabAdmin.disabled = true;
+        }
+
+        if (tabUsers) {
+            tabUsers.disabled = true;
+        }
+
+        if (tabProducts) {
+            tabProducts.disabled = true;
+        }
     }
-
-    if (userName) {
-      userName.textContent =
-        currentUser.nombre || currentUser.email;
-    }
-
-    if (userRole) {
-      userRole.textContent =
-        currentUser.role === "admin"
-          ? "Administrador"
-          : "Cliente";
-    }
-
-    const isAdmin = currentUser.role === "admin";
-
-    if (tabAdmin) tabAdmin.disabled = !isAdmin;
-    if (tabUsers) tabUsers.disabled = !isAdmin;
-    if (tabProducts) tabProducts.disabled = !isAdmin;
-
-  } else {
-    if (userSection) {
-      userSection.style.display = "none";
-    }
-
-    if (tabAdmin) tabAdmin.disabled = true;
-    if (tabUsers) tabUsers.disabled = true;
-    if (tabProducts) tabProducts.disabled = true;
-  }
 }
 
 /*********************
@@ -1831,18 +1896,18 @@ function setActiveTab(tab) {
     initializeBraintree();
   }
 
-  if (
-    tab === "admin" &&
-    currentUser?.role === "admin"
-  ) {
-    renderOrders();
+  const isAdmin =
+      (currentUser?.role || "")
+          .toString()
+          .trim()
+          .toLowerCase() === "admin";
+
+  if (tab === "admin" && isAdmin) {
+      renderOrders();
   }
 
-  if (
-    tab === "users" &&
-    currentUser?.role === "admin"
-  ) {
-    renderUsers();
+  if (tab === "users" && isAdmin) {
+      renderUsers();
   }
 
   if (tab === "products-admin") {
