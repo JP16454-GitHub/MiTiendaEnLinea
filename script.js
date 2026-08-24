@@ -2348,17 +2348,10 @@ async function renderOrders() {
 
     let totalVentas = 0;
 
-    // ==========================================
     // FILTRAR PEDIDOS
-    // ==========================================
-
     let filteredOrders = [...adminOrders];
 
-
-    // ==========================================
     // BUSCADOR
-    // ==========================================
-
     if (orderSearchTerm.trim()) {
 
       const search =
@@ -2383,28 +2376,11 @@ async function renderOrders() {
             (order.user?.nombre || "")
               .toLowerCase()
               .includes(search)
-
-            ||
-
-            (order.customerEmail || "")
-              .toLowerCase()
-              .includes(search)
-
-            ||
-
-            (order.customerName || "")
-              .toLowerCase()
-              .includes(search)
           );
-
         });
     }
 
-
-    // ==========================================
     // FILTRO STATUS
-    // ==========================================
-
     if (orderStatusFilter !== "all") {
 
       filteredOrders =
@@ -2422,15 +2398,10 @@ async function renderOrders() {
               .toLowerCase()
               .trim()
           );
-
         });
     }
 
-
-    // ==========================================
     // SIN RESULTADOS
-    // ==========================================
-
     if (!filteredOrders.length) {
 
       tbody.innerHTML = `
@@ -2445,264 +2416,48 @@ async function renderOrders() {
       return;
     }
 
-
-    // ==========================================
-    // ESTADOS DISPONIBLES
-    // ==========================================
-
-    const statuses = [
-      "Pendiente",
-      "Pagado",
-      "En preparación",
-      "Enviado",
-      "Entregado",
-      "Cancelado"
-    ];
-
-
-    // ==========================================
-    // CREAR FILAS
-    // ==========================================
-
     filteredOrders.forEach(order => {
 
-      totalVentas +=
-        Number(order.total || 0);
+      totalVentas += Number(order.total || 0);
 
       const tr =
         document.createElement("tr");
 
-
-      const currentStatus =
-        order.status || "Pendiente";
-
-
-      // ========================================
-      // SELECT DE ESTADO
-      // ========================================
-
-      const statusSelect =
-        document.createElement("select");
-
-      statusSelect.className =
-        "order-status-select";
-
-      statusSelect.dataset.orderId =
-        order.id;
-
-
-      statuses.forEach(status => {
-
-        const option =
-          document.createElement("option");
-
-        option.value = status;
-
-        option.textContent = status;
-
-        if (status === currentStatus) {
-          option.selected = true;
-        }
-
-        statusSelect.appendChild(option);
-
-      });
-
-
-      // ========================================
-      // ESTILO
-      // ========================================
-
-      statusSelect.style.padding =
-        "6px 10px";
-
-      statusSelect.style.borderRadius =
-        "6px";
-
-      statusSelect.style.border =
-        "1px solid #ccc";
-
-      statusSelect.style.cursor =
-        "pointer";
-
-
-      // ========================================
-      // EVITAR QUE EL CLICK ABRA
-      // EL DETALLE DEL PEDIDO
-      // ========================================
-
-      statusSelect.addEventListener(
-        "click",
-        event => {
-          event.stopPropagation();
-        }
-      );
-
-
-      // ========================================
-      // CAMBIAR ESTADO
-      // ========================================
-
-      statusSelect.addEventListener(
-        "change",
-        async event => {
-
-          event.stopPropagation();
-
-          const newStatus =
-            event.target.value;
-
-          const oldStatus =
-            order.status;
-
-
-          console.log(
-            `🔄 Pedido #${order.id}`,
-            oldStatus,
-            "→",
-            newStatus
-          );
-
-
-          try {
-
-            statusSelect.disabled = true;
-
-
-            const result =
-              await apiRequest(
-                `/orders/${order.id}/status`,
-                {
-                  method: "PUT",
-
-                  body: {
-                    status: newStatus
-                  }
-                }
-              );
-
-
-            console.log(
-              "✅ Estado actualizado:",
-              result
-            );
-
-
-            // Actualizar objeto local
-            order.status =
-              result.status ||
-              newStatus;
-
-
-            showToast(
-              `Pedido #${order.id}: ${order.status}`,
-              "success"
-            );
-
-
-            // Volver a cargar
-            await renderOrders();
-
-
-          } catch (error) {
-
-            console.error(
-              "❌ Error actualizando estado:",
-              error
-            );
-
-
-            // Regresar al estado anterior
-            statusSelect.value =
-              oldStatus;
-
-
-            showToast(
-              error.message ||
-              "No se pudo actualizar el estado",
-              "error"
-            );
-
-          } finally {
-
-            statusSelect.disabled =
-              false;
-
-          }
-
-        }
-      );
-
-
-      // ========================================
-      // HTML DE LA FILA
-      // ========================================
-
       tr.innerHTML = `
+        <td>#${order.id}</td>
 
         <td>
-          #${order.id}
-        </td>
-
-        <td>
-          ${
-            order.user?.nombre ||
+          ${order.user?.nombre ||
             order.customerName ||
-            "Cliente"
-          }
+            "Cliente"}
         </td>
 
         <td>
           ${formatCurrency(order.total)}
         </td>
 
-        <td class="order-status-cell">
+        <td>
+          ${order.status || "Pendiente"}
         </td>
 
         <td>
           ${
             order.fechaPedido
-              ? new Date(
-                  order.fechaPedido
-                ).toLocaleDateString(
-                  "es-MX"
-                )
+              ? new Date(order.fechaPedido)
+                  .toLocaleDateString("es-MX")
               : "-"
           }
         </td>
-
       `;
 
+      tr.style.cursor = "pointer";
 
-      // Insertar select
-      tr.querySelector(
-        ".order-status-cell"
-      ).appendChild(statusSelect);
-
-
-      // ========================================
-      // CLICK EN LA FILA
-      // ========================================
-
-      tr.style.cursor =
-        "pointer";
-
-      tr.addEventListener(
-        "click",
-        () => {
-          showOrderDetail(order);
-        }
-      );
-
+      tr.addEventListener("click", () => {
+        showOrderDetail(order);
+      });
 
       tbody.appendChild(tr);
-
     });
-
-
-    // ==========================================
-    // TOTALES
-    // ==========================================
 
     const countEl =
       document.getElementById(
@@ -2714,45 +2469,28 @@ async function renderOrders() {
         "admin-orders-total"
       );
 
-
     if (countEl) {
-
       countEl.textContent =
         filteredOrders.length;
-
     }
 
-
     if (totalEl) {
-
       totalEl.textContent =
-        formatCurrency(
-          totalVentas
-        );
-
+        formatCurrency(totalVentas);
     }
 
   } catch (error) {
 
-    console.error(
-      "❌ Error renderizando pedidos:",
-      error
-    );
-
+    console.error(error);
 
     tbody.innerHTML = `
       <tr>
         <td colspan="5"
-            style="
-              text-align:center;
-              padding:20px;
-              color:red;
-            ">
+            style="text-align:center;padding:20px;color:red;">
           Error cargando pedidos
         </td>
       </tr>
     `;
-
   }
 }
 
