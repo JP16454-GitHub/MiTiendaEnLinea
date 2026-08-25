@@ -2152,78 +2152,90 @@ tbody
 
 function showUserDetail(user) {
 
-    const empty = document.getElementById(
-        "user-detail-empty"
+  if (!user) {
+    console.error("Usuario inválido");
+    return;
+  }
+
+  const empty =
+    document.getElementById("user-detail-empty");
+
+  const content =
+    document.getElementById("user-detail-content");
+
+  if (!content) {
+    console.error(
+      "No existe #user-detail-content"
     );
+    return;
+  }
 
-    const content = document.getElementById(
-        "user-detail-content"
-    );
+  // ==========================================
+  // DATOS DEL USUARIO
+  // ==========================================
 
-    if (!empty || !content) {
-        console.error(
-            "No existe #user-detail-empty o #user-detail-content"
-        );
-        return;
-    }
+  const nombre =
+    document.getElementById("user-detail-nombre");
 
-    // Ocultar mensaje
+  const email =
+    document.getElementById("user-detail-email");
+
+  const role =
+    document.getElementById("user-detail-role");
+
+  const direccion =
+    document.getElementById("user-detail-direccion");
+
+  const ciudad =
+    document.getElementById("user-detail-ciudad");
+
+  const estado =
+    document.getElementById("user-detail-estado");
+
+  const cp =
+    document.getElementById("user-detail-cp");
+
+  if (nombre) {
+    nombre.textContent = user.nombre || "-";
+  }
+
+  if (email) {
+    email.textContent = user.email || "-";
+  }
+
+  if (role) {
+    role.textContent = user.role || "-";
+  }
+
+  if (direccion) {
+    direccion.textContent = user.direccion || "-";
+  }
+
+  if (ciudad) {
+    ciudad.textContent = user.ciudad || "-";
+  }
+
+  if (estado) {
+    estado.textContent = user.estado || "-";
+  }
+
+  if (cp) {
+    cp.textContent = user.cp || "-";
+  }
+
+  // ==========================================
+  // MOSTRAR DETALLE
+  // ==========================================
+
+  if (empty) {
     empty.classList.add("hidden");
+  }
 
-    // Mostrar detalle
-    content.classList.remove("hidden");
+  content.classList.remove("hidden");
 
-    // Datos
-    const nombre = document.getElementById(
-        "user-detail-nombre"
-    );
-
-    const email = document.getElementById(
-        "user-detail-email"
-    );
-
-    const role = document.getElementById(
-        "user-detail-role"
-    );
-
-    const direccion = document.getElementById(
-        "user-detail-direccion"
-    );
-
-    const ciudad = document.getElementById(
-        "user-detail-ciudad"
-    );
-
-    const estado = document.getElementById(
-        "user-detail-estado"
-    );
-
-    const cp = document.getElementById(
-        "user-detail-cp"
-    );
-
-    if (nombre)
-        nombre.textContent = user.nombre || "-";
-
-    if (email)
-        email.textContent = user.email || "-";
-
-    if (role)
-        role.textContent = user.role || "-";
-
-    if (direccion)
-        direccion.textContent = user.direccion || "-";
-
-    if (ciudad)
-        ciudad.textContent = user.ciudad || "-";
-
-    if (estado)
-        estado.textContent = user.estado || "-";
-
-    if (cp)
-        cp.textContent = user.cp || "-";
+  console.log("👤 Detalle usuario:", user);
 }
-/*
+
 function loadUserForm(user) {
 
   if (!user) {
@@ -2233,189 +2245,79 @@ function loadUserForm(user) {
 
   currentSelectedUser = user;
 
-  const detail = document.getElementById("user-detail");
+  // ==========================================
+  // ELEMENTOS DEL FORMULARIO
+  // ==========================================
 
-  if (!detail) {
-    console.error("No existe #user-detail");
+  const editEmpty =
+    document.getElementById("user-edit-empty");
+
+  const editForm =
+    document.getElementById("user-edit-form");
+
+  if (!editForm) {
+    console.error("No existe #user-edit-form");
     return;
   }
 
-  const role = String(user.role || "").toLowerCase();
+  // ==========================================
+  // CARGAR DATOS
+  // ==========================================
 
-  detail.innerHTML = `
+  const nombre =
+    document.getElementById("edit-user-nombre");
 
-    <div class="admin-card">
+  const email =
+    document.getElementById("edit-user-email");
 
-      <h3>Editar usuario</h3>
+  const direccion =
+    document.getElementById("edit-user-direccion");
 
-      <div class="form-group">
-        <label for="edit-user-name">
-          Nombre
-        </label>
+  const ciudad =
+    document.getElementById("edit-user-ciudad");
 
-        <input
-          type="text"
-          id="edit-user-name"
-          value="${escapeHtml(user.nombre || "")}"
-        />
-      </div>
+  const estado =
+    document.getElementById("edit-user-estado");
 
+  const cp =
+    document.getElementById("edit-user-cp");
 
-      <div class="form-group">
-        <label for="edit-user-email">
-          Email
-        </label>
-
-        <input
-          type="email"
-          id="edit-user-email"
-          value="${escapeHtml(user.email || "")}"
-        />
-      </div>
-
-
-      <div class="form-group">
-        <label for="edit-user-role">
-          Rol
-        </label>
-
-        <select id="edit-user-role">
-
-          <option
-            value="Cliente"
-            ${role === "cliente" ? "selected" : ""}>
-            Cliente
-          </option>
-
-          <option
-            value="Admin"
-            ${role === "admin" ? "selected" : ""}>
-            Admin
-          </option>
-
-        </select>
-      </div>
-
-
-      <div
-        style="
-          margin-top:20px;
-          display:flex;
-          gap:10px;
-        "
-      >
-
-        <button
-          type="button"
-          class="primary-btn"
-          id="save-user-btn">
-
-          Guardar
-
-        </button>
-
-      </div>
-
-    </div>
-  `;
-
-
-  const saveBtn =
-    document.getElementById("save-user-btn");
-
-
-  if (!saveBtn) {
-    console.error("No existe #save-user-btn");
-    return;
+  if (nombre) {
+    nombre.value = user.nombre || "";
   }
 
+  if (email) {
+    email.value = user.email || "";
+  }
 
-  saveBtn.addEventListener("click", async () => {
+  if (direccion) {
+    direccion.value = user.direccion || "";
+  }
 
-    try {
+  if (ciudad) {
+    ciudad.value = user.ciudad || "";
+  }
 
-      const payload = {
+  if (estado) {
+    estado.value = user.estado || "";
+  }
 
-        nombre:
-          document
-            .getElementById("edit-user-name")
-            ?.value
-            ?.trim() || "",
+  if (cp) {
+    cp.value = user.cp || "";
+  }
 
-        email:
-          document
-            .getElementById("edit-user-email")
-            ?.value
-            ?.trim() || "",
+  // ==========================================
+  // MOSTRAR FORMULARIO
+  // ==========================================
 
-        role:
-          document
-            .getElementById("edit-user-role")
-            ?.value || "Cliente"
+  if (editEmpty) {
+    editEmpty.classList.add("hidden");
+  }
 
-      };
+  editForm.classList.remove("hidden");
 
-
-      if (!payload.nombre) {
-        throw new Error(
-          "El nombre es obligatorio"
-        );
-      }
-
-
-      if (!payload.email) {
-        throw new Error(
-          "El email es obligatorio"
-        );
-      }
-
-
-      console.log(
-        "Actualizando usuario:",
-        user.id,
-        payload
-      );
-
-
-      await updateUser(
-        user.id,
-        payload
-      );
-
-
-      showToast(
-        "Usuario actualizado",
-        "success"
-      );
-
-
-      await renderUsers();
-
-
-      showUserDetail({
-        ...user,
-        ...payload
-      });
-
-
-    } catch (error) {
-
-      console.error(
-        "Error actualizando usuario:",
-        error
-      );
-
-      showToast(
-        error.message ||
-        "Error actualizando usuario",
-        "error"
-      );
-
-    }
-
-  });
-
-}*/
+  console.log("✏️ Usuario cargado para edición:", user);
+}
 
 
 /*********************
