@@ -2152,81 +2152,95 @@ tbody
 
 function showUserDetail(user) {
 
-  const detail =
-    document.getElementById(
-      "user-detail"
+    const empty = document.getElementById(
+        "user-detail-empty"
     );
 
-  if (!detail) return;
+    const content = document.getElementById(
+        "user-detail-content"
+    );
 
-  detail.innerHTML = `
+    if (!empty || !content) {
+        console.error(
+            "No existe #user-detail-empty o #user-detail-content"
+        );
+        return;
+    }
 
-    <div class="admin-card">
+    // Ocultar mensaje
+    empty.classList.add("hidden");
 
-      <h3>Detalle del usuario</h3>
+    // Mostrar detalle
+    content.classList.remove("hidden");
 
-      <p>
-        <strong>ID:</strong>
-        ${user.id || "-"}
-      </p>
+    // Datos
+    const nombre = document.getElementById(
+        "user-detail-nombre"
+    );
 
-      <p>
-        <strong>Nombre:</strong>
-        ${user.nombre || "-"}
-      </p>
+    const email = document.getElementById(
+        "user-detail-email"
+    );
 
-      <p>
-        <strong>Email:</strong>
-        ${user.email || "-"}
-      </p>
+    const role = document.getElementById(
+        "user-detail-role"
+    );
 
-      <p>
-        <strong>Rol:</strong>
-        ${user.role || "-"}
-      </p>
+    const direccion = document.getElementById(
+        "user-detail-direccion"
+    );
 
-      <p>
-        <strong>Estado:</strong>
-        ${user.estado || "-"}
-      </p>
+    const ciudad = document.getElementById(
+        "user-detail-ciudad"
+    );
 
-      <p>
-        <strong>Ciudad:</strong>
-        ${user.ciudad || "-"}
-      </p>
+    const estado = document.getElementById(
+        "user-detail-estado"
+    );
 
-      <p>
-        <strong>Dirección:</strong>
-        ${user.direccion || "-"}
-      </p>
+    const cp = document.getElementById(
+        "user-detail-cp"
+    );
 
-    </div>
-  `;
+    if (nombre)
+        nombre.textContent = user.nombre || "-";
+
+    if (email)
+        email.textContent = user.email || "-";
+
+    if (role)
+        role.textContent = user.role || "-";
+
+    if (direccion)
+        direccion.textContent = user.direccion || "-";
+
+    if (ciudad)
+        ciudad.textContent = user.ciudad || "-";
+
+    if (estado)
+        estado.textContent = user.estado || "-";
+
+    if (cp)
+        cp.textContent = user.cp || "-";
 }
-
+/*
 function loadUserForm(user) {
 
   if (!user) {
-    showToast(
-      "Usuario inválido",
-      "error"
-    );
+    showToast("Usuario inválido", "error");
     return;
   }
 
   currentSelectedUser = user;
 
-  const detail =
-    document.getElementById(
-      "user-detail"
-    );
+  const detail = document.getElementById("user-detail");
 
   if (!detail) {
-    console.error(
-      "No existe #user-detail"
-    );
+    console.error("No existe #user-detail");
     return;
   }
+
+  const role = String(user.role || "").toLowerCase();
 
   detail.innerHTML = `
 
@@ -2235,7 +2249,9 @@ function loadUserForm(user) {
       <h3>Editar usuario</h3>
 
       <div class="form-group">
-        <label>Nombre</label>
+        <label for="edit-user-name">
+          Nombre
+        </label>
 
         <input
           type="text"
@@ -2244,8 +2260,11 @@ function loadUserForm(user) {
         />
       </div>
 
+
       <div class="form-group">
-        <label>Email</label>
+        <label for="edit-user-email">
+          Email
+        </label>
 
         <input
           type="email"
@@ -2254,45 +2273,45 @@ function loadUserForm(user) {
         />
       </div>
 
+
       <div class="form-group">
-        <label>Rol</label>
+        <label for="edit-user-role">
+          Rol
+        </label>
 
         <select id="edit-user-role">
 
           <option
-            value="cliente"
-            ${
-              user.role === "cliente"
-                ? "selected"
-                : ""
-            }>
+            value="Cliente"
+            ${role === "cliente" ? "selected" : ""}>
             Cliente
           </option>
 
           <option
-            value="admin"
-            ${
-              user.role === "admin"
-                ? "selected"
-                : ""
-            }>
+            value="Admin"
+            ${role === "admin" ? "selected" : ""}>
             Admin
           </option>
 
         </select>
       </div>
 
+
       <div
         style="
           margin-top:20px;
           display:flex;
           gap:10px;
-        ">
+        "
+      >
 
         <button
+          type="button"
           class="primary-btn"
           id="save-user-btn">
+
           Guardar
+
         </button>
 
       </div>
@@ -2300,81 +2319,103 @@ function loadUserForm(user) {
     </div>
   `;
 
+
   const saveBtn =
-    document.getElementById(
-      "save-user-btn"
-    );
+    document.getElementById("save-user-btn");
+
 
   if (!saveBtn) {
-    console.error(
-      "No existe #save-user-btn"
-    );
+    console.error("No existe #save-user-btn");
     return;
   }
 
-  saveBtn.addEventListener(
-    "click",
-    async () => {
 
-      try {
+  saveBtn.addEventListener("click", async () => {
 
-        const payload = {
+    try {
 
-          nombre:
-            document.getElementById(
-              "edit-user-name"
-            )?.value?.trim() || "",
+      const payload = {
 
-          email:
-            document.getElementById(
-              "edit-user-email"
-            )?.value?.trim() || "",
+        nombre:
+          document
+            .getElementById("edit-user-name")
+            ?.value
+            ?.trim() || "",
 
-          role:
-            document.getElementById(
-              "edit-user-role"
-            )?.value || "cliente"
-        };
+        email:
+          document
+            .getElementById("edit-user-email")
+            ?.value
+            ?.trim() || "",
 
-        if (
-          !payload.nombre ||
-          !payload.email
-        ) {
-          throw new Error(
-            "Nombre y email son obligatorios"
-          );
-        }
+        role:
+          document
+            .getElementById("edit-user-role")
+            ?.value || "Cliente"
 
-        await updateUser(
-          user.id,
-          payload
-        );
+      };
 
-        showToast(
-          "Usuario actualizado",
-          "success"
-        );
 
-        await renderUsers();
-
-        showUserDetail({
-          ...user,
-          ...payload
-        });
-
-      } catch (error) {
-
-        console.error(error);
-
-        showToast(
-          error.message ||
-          "Error actualizando usuario",
-          "error"
+      if (!payload.nombre) {
+        throw new Error(
+          "El nombre es obligatorio"
         );
       }
+
+
+      if (!payload.email) {
+        throw new Error(
+          "El email es obligatorio"
+        );
+      }
+
+
+      console.log(
+        "Actualizando usuario:",
+        user.id,
+        payload
+      );
+
+
+      await updateUser(
+        user.id,
+        payload
+      );
+
+
+      showToast(
+        "Usuario actualizado",
+        "success"
+      );
+
+
+      await renderUsers();
+
+
+      showUserDetail({
+        ...user,
+        ...payload
+      });
+
+
+    } catch (error) {
+
+      console.error(
+        "Error actualizando usuario:",
+        error
+      );
+
+      showToast(
+        error.message ||
+        "Error actualizando usuario",
+        "error"
+      );
+
     }
-  );
-}
+
+  });
+
+}*/
 
 
 /*********************
