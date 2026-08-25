@@ -59,6 +59,16 @@ let cart = [];
 let currentFilter = "all";
 let currentUser = null;
 
+function isAdmin() {
+
+  return (
+    (currentUser?.role || "")
+      .toString()
+      .trim()
+      .toLowerCase() === "admin"
+  );
+}
+
 //Intenta recuperar el usuario del localStorage. 
 // Si falla (por datos corruptos), asigna null.
 try {
@@ -1478,8 +1488,8 @@ async function handleCheckout(event) {
  *********************/
 function renderProductsAdmin() {
 
-  if (currentUser?.role !== "admin") {
-  return;
+  if (!isAdmin()) {
+    return;
   }
 
   const tbody =
@@ -2842,9 +2852,7 @@ function initEvents() {
     .getElementById("tab-admin")
     ?.addEventListener("click", () => {
 
-      if (
-        currentUser?.role === "admin"
-      ) {
+      if (isAdmin()) {
         setActiveTab("admin");
       }
     });
@@ -2853,9 +2861,7 @@ function initEvents() {
     .getElementById("tab-users")
     ?.addEventListener("click", () => {
 
-      if (
-        currentUser?.role === "admin"
-      ) {
+      if (isAdmin()) {
         setActiveTab("users");
       }
     });
@@ -2866,9 +2872,7 @@ function initEvents() {
     )
     ?.addEventListener("click", () => {
 
-      if (
-        currentUser?.role === "admin"
-      ) {
+      if (isAdmin()) {
         setActiveTab(
           "products-admin"
         );
@@ -3303,7 +3307,7 @@ async function main() {
 
   await fetchProducts();
 
-  if (currentUser?.role === "admin") {
+  if (isAdmin()) {
     renderProductsAdmin();
   }
 
