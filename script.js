@@ -1731,6 +1731,8 @@ async function handleProductSubmit(event) {
       }
     }
 
+    const API_ROOT = API_URL.replace(/\/api\/?$/, "");
+
     const product = {
       name:
         document
@@ -1739,23 +1741,17 @@ async function handleProductSubmit(event) {
           .trim(),
 
       price: parseFloat(
-        document.getElementById(
-          "product-price"
-        ).value
+        document.getElementById("product-price").value
       ),
 
       type,
 
       category:
-        document.getElementById(
-          "product-category"
-        ).value,
+        document.getElementById("product-category").value,
 
       description:
         document
-          .getElementById(
-            "product-description"
-          )
+          .getElementById("product-description")
           .value
           .trim(),
 
@@ -1766,15 +1762,13 @@ async function handleProductSubmit(event) {
 
       stock:
         parseInt(
-          document.getElementById(
-            "product-stock"
-          ).value
+          document.getElementById("product-stock").value
         ) || 0,
 
       imageUrl:
         imageInput.startsWith("http")
           ? imageInput
-          : `/images/${imageInput}`
+          : `${API_ROOT}/uploads/${imageInput}`
     };
 
     if (
