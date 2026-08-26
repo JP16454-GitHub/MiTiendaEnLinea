@@ -44,6 +44,35 @@ let currentConfig = { ...defaultConfig };
 /*const API_URL = "https://localhost:7171/api";*/
 const API_URL = "https://mitiendaenlinea.runasp.net/api";
 
+function getProductImageUrl(imageUrl) {
+
+  if (!imageUrl) {
+    return "https://placehold.co/300x300/1e1b4b/f1f5f9?text=Producto";
+  }
+
+  let fileName = String(imageUrl).trim();
+
+  // Si viene como URL completa
+  try {
+    fileName = new URL(fileName).pathname;
+  } catch {
+    // No es una URL, continuar
+  }
+
+  // Obtener solamente el nombre del archivo
+  fileName = fileName
+    .split("/")
+    .pop()
+    .split("\\")
+    .pop()
+    .trim();
+
+  if (!fileName) {
+    return "https://placehold.co/300x300/1e1b4b/f1f5f9?text=Producto";
+  }
+
+  return `${API_URL.replace("/api", "")}/uploads/${encodeURIComponent(fileName)}`;
+}
 
 /*********************
  * ESTADO GLOBAL     *
@@ -819,10 +848,7 @@ function renderProducts() {
 
     card.className = "product-card";
 
-    const image =
-      product.imageUrl
-        ? `${API_URL.replace("/api", "")}/uploads/${product.imageUrl}`
-        : "https://placehold.co/300x300/1e1b4b/f1f5f9?text=Producto";
+    const image = getProductImageUrl(product.imageUrl);
 
     card.innerHTML = `
       <img
@@ -1498,10 +1524,6 @@ function renderProductsAdmin() {
       "products-table-body"
     );
 
-  const imageUrl = product.imageUrl
-    ? `${API_URL.replace("/api", "")}/uploads/${product.imageUrl}`
-    : "";    
-
   if (!tbody) return;
 
   tbody.innerHTML = "";
@@ -1511,21 +1533,24 @@ function renderProductsAdmin() {
     const tr =
       document.createElement("tr");
 
+    const imageUrl =
+      getProductImageUrl(product.imageUrl);
+
     tr.innerHTML = `
-      <td>${product.name}</td>
+      <td>${escapeHtml(product.name || "")}</td>
 
       <td>
         ${formatCurrency(product.price)}
       </td>
 
-      <td>${product.type}</td>
+      <td>${escapeHtml(product.type || "")}</td>
 
-      <td>${product.category}</td>
+      <td>${escapeHtml(product.category || "")}</td>
 
       <td>${product.stock || 0}</td>
 
       <td>
-        ${product.description || ""}
+        ${escapeHtml(product.description || "")}
       </td>
 
       <td>
@@ -1608,6 +1633,7 @@ function renderProductsAdmin() {
           );
 
         } catch (error) {
+
           console.error(error);
 
           showToast(
@@ -1620,6 +1646,7 @@ function renderProductsAdmin() {
 }
 
 function loadProductForm(product) {
+
   document.getElementById(
     "product-id"
   ).value = product.id || "";
@@ -1648,33 +1675,44 @@ function loadProductForm(product) {
     "product-stock"
   ).value = product.stock || 0;
 
-  let imageName = product.imageUrl || "";
+
+  // =====================================
+  // OBTENER SOLO NOMBRE DE IMAGEN
+  // =====================================
+
+  let imageName =
+    product.imageUrl || "";
 
   try {
-    imageName = new URL(imageName).pathname;
+
+    imageName =
+      new URL(imageName).pathname;
+
   } catch {
     // No es URL
   }
 
-  imageName = imageName
-    .split("/")
-    .pop()
-    .split("\\")
-    .pop()
-    .trim();
+  imageName =
+    imageName
+      .split("/")
+      .pop()
+      .split("\\")
+      .pop()
+      .trim();
+
 
   document.getElementById(
     "product-image"
   ).value = imageName;
+
 
   const title =
     document.getElementById(
       "product-form-title"
     );
 
-
-
   if (title) {
+
     title.textContent =
       "Detalles del producto";
   }
@@ -1725,6 +1763,7 @@ async function handleProductSubmit(event) {
       .value
       .trim();
 
+      
     // Obtener únicamente el nombre del archivo
     if (imageInput) {
       try {
