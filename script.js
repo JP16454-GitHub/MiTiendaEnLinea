@@ -1956,35 +1956,42 @@ async function handleProductSubmit(event) {
 
   event.preventDefault();
 
-  const form = event.target;
+  const btn = event.target.querySelector(
+    'button[type="submit"]'
+  );
+
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add("loading");
+  }
 
   try {
 
-    /********************************
-     * OBTENER ID
-     ********************************/
+    // ==============================
+    // ID DEL PRODUCTO
+    // ==============================
 
     const id =
       document.getElementById("product-id")?.value.trim() || "";
 
 
-    /********************************
-     * OBTENER DATOS DEL FORMULARIO
-     ********************************/
+    // ==============================
+    // DATOS
+    // ==============================
 
     const name =
       document.getElementById("product-name")?.value.trim() || "";
-
-    const price =
-      parseFloat(
-        document.getElementById("product-price")?.value
-      );
 
     const type =
       document.getElementById("product-type")?.value || "fisico";
 
     const category =
       document.getElementById("product-category")?.value.trim() || "";
+
+    const price =
+      parseFloat(
+        document.getElementById("product-price")?.value
+      );
 
     const description =
       document
@@ -1997,16 +2004,16 @@ async function handleProductSubmit(event) {
         document.getElementById("product-stock")?.value
       ) || 0;
 
-    let imageInput =
+    let imageUrl =
       document
         .getElementById("product-image")
         ?.value
         .trim() || "";
 
 
-    /********************************
-     * VALIDACIONES
-     ********************************/
+    // ==============================
+    // VALIDACIONES
+    // ==============================
 
     if (!name) {
       throw new Error(
@@ -2016,13 +2023,13 @@ async function handleProductSubmit(event) {
 
     if (isNaN(price) || price < 0) {
       throw new Error(
-        "Ingresa un precio válido."
+        "El precio debe ser válido."
       );
     }
 
     if (!description) {
       throw new Error(
-        "La descripción del producto es obligatoria."
+        "La descripción es obligatoria."
       );
     }
 
@@ -2033,121 +2040,143 @@ async function handleProductSubmit(event) {
     }
 
 
-    /********************************
-     * NORMALIZAR IMAGEN
-     ********************************/
+    // ==============================
+    // NORMALIZAR IMAGEN
+    // ==============================
 
-    if (imageInput) {
+    if (imageUrl) {
 
       try {
 
-        // Si se escribió una URL completa
-        imageInput =
-          new URL(imageInput).pathname;
+        const url = new URL(imageUrl);
+
+        imageUrl =
+          url.pathname
+            .split("/")
+            .pop();
 
       } catch {
 
-        // No es una URL, se conserva
+        imageUrl =
+          imageUrl
+            .split("/")
+            .pop()
+            .split("\\")
+            .pop()
+            .trim();
       }
-
-      imageInput =
-        imageInput
-          .split("/")
-          .pop()
-          .split("\\")
-          .pop()
-          .trim();
     }
 
 
-    /********************************
-     * CREAR OBJETO PRODUCTO
-     ********************************/
+    // ==============================
+    // BADGE
+    // ==============================
+
+    const badge =
+      type.toLowerCase() === "fisico"
+        ? "Físico"
+        : "Digital";
+
+
+    // ==============================
+    // DTO
+    // ==============================
 
     const product = {
 
       name: name,
 
-      price: price,
-
       type: type,
 
       category: category,
 
+      price: price,
+
       description: description,
 
-      badge:
-        type.toLowerCase() === "fisico"
-          ? "Físico"
-          : "Digital",
+      badge: badge,
 
       stock: stock,
 
-      imageUrl: imageInput || null
+      imageUrl: imageUrl
     };
 
 
-    console.log("=================================");
+    console.log(
+      "================================"
+    );
+
     console.log(
       id
         ? "✏️ ACTUALIZANDO PRODUCTO"
         : "➕ CREANDO PRODUCTO"
     );
-    console.log("=================================");
+
+    console.log(
+      "================================"
+    );
 
     console.log("ID:", id);
-    console.log("Producto:", product);
+    console.log("Payload:", product);
 
 
-    /********************************
-     * CREAR / ACTUALIZAR
-     ********************************/
+    // ==============================
+    // CREAR
+    // ==============================
 
-    let result;
+    if (!id) {
 
-    if (id) {
+      const result =
+        await createProduct(product);
 
-      result =
+      console.log(
+        "✅ PRODUCTO CREADO:",
+        result
+      );
+
+      showToast(
+        result.message ||
+        "Producto creado correctamente",
+        "success"
+      );
+
+    }
+
+    // ==============================
+    // ACTUALIZAR
+    // ==============================
+
+    else {
+
+      const result =
         await updateProduct(
           id,
           product
         );
 
-      showToast(
-        "Producto actualizado correctamente",
-        "success"
+      console.log(
+        "✅ PRODUCTO ACTUALIZADO:",
+        result
       );
 
-    } else {
-
-      result =
-        await createProduct(
-          product
-        );
-
       showToast(
-        "Producto creado correctamente",
+        result.message ||
+        "Producto actualizado correctamente",
         "success"
       );
     }
 
 
-    console.log(
-      "✅ RESPUESTA API:",
-      result
-    );
-
-
-    /********************************
-     * LIMPIAR FORMULARIO
-     ********************************/
+    // ==============================
+    // LIMPIAR FORMULARIO
+    // ==============================
 
     resetProductForm();
 
 
-    /********************************
-     * RECARGAR PRODUCTOS
-     ********************************/
+    // ==============================
+    // RECARGAR PRODUCTOS
+    // ==============================
 
     await fetchProducts();
 
@@ -2157,7 +2186,7 @@ async function handleProductSubmit(event) {
   } catch (error) {
 
     console.error(
-      "❌ ERROR GUARDANDO PRODUCTO:",
+      "❌ ERROR PRODUCTO:",
       error
     );
 
@@ -2166,8 +2195,16 @@ async function handleProductSubmit(event) {
       "Error guardando producto",
       "error"
     );
+
+  } finally {
+
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove("loading");
+    }
   }
 }
+
 
 /*********************
  * NAVEGACIÓN        *
