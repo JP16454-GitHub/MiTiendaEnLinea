@@ -820,8 +820,9 @@ function renderProducts() {
     card.className = "product-card";
 
     const image =
-      product.imageUrl ||
-      "https://placehold.co/300x300/1e1b4b/f1f5f9?text=Producto";
+      product.imageUrl
+        ? `${API_URL.replace("/api", "")}/uploads/${product.imageUrl}`
+        : "https://placehold.co/300x300/1e1b4b/f1f5f9?text=Producto";
 
     card.innerHTML = `
       <img
@@ -1497,6 +1498,10 @@ function renderProductsAdmin() {
       "products-table-body"
     );
 
+  const imageUrl = product.imageUrl
+    ? `${API_URL.replace("/api", "")}/uploads/${product.imageUrl}`
+    : "";    
+
   if (!tbody) return;
 
   tbody.innerHTML = "";
@@ -1525,7 +1530,7 @@ function renderProductsAdmin() {
 
       <td>
         <img
-          src="${product.imageUrl || ""}"
+          src="${imageUrl}"
           style="
             width:50px;
             height:50px;
@@ -1643,19 +1648,20 @@ function loadProductForm(product) {
     "product-stock"
   ).value = product.stock || 0;
 
-  let imageName =
-    product.imageUrl || "";
+  let imageName = product.imageUrl || "";
 
   try {
-    imageName =
-      new URL(imageName)
-        .pathname
-        .split("/")
-        .pop();
+    imageName = new URL(imageName).pathname;
   } catch {
-    imageName =
-      imageName.split("/").pop();
+    // No es URL
   }
+
+  imageName = imageName
+    .split("/")
+    .pop()
+    .split("\\")
+    .pop()
+    .trim();
 
   document.getElementById(
     "product-image"
@@ -1665,6 +1671,8 @@ function loadProductForm(product) {
     document.getElementById(
       "product-form-title"
     );
+
+
 
   if (title) {
     title.textContent =
@@ -1712,33 +1720,32 @@ async function handleProductSubmit(event) {
         "product-type"
       ).value;
 
-    let imageInput =
-      document
-        .getElementById("product-image")
-        .value
-        .trim();
+    let imageInput = document
+      .getElementById("product-image")
+      .value
+      .trim();
 
-    try {
-      imageInput =
-        new URL(imageInput)
-          .pathname
-          .split("/")
-          .pop();
-    } catch {
-      if (imageInput.includes("/")) {
-        imageInput =
-          imageInput.split("/").pop();
+    // Obtener únicamente el nombre del archivo
+    if (imageInput) {
+      try {
+        imageInput = new URL(imageInput).pathname;
+      } catch {
+        // No es una URL, continuar
       }
+
+      imageInput = imageInput
+        .split("/")
+        .pop()
+        .split("\\")
+        .pop()
+        .trim();
     }
 
-    const API_ROOT = API_URL.replace(/\/api\/?$/, "");
-
     const product = {
-      name:
-        document
-          .getElementById("product-name")
-          .value
-          .trim(),
+      name: document
+        .getElementById("product-name")
+        .value
+        .trim(),
 
       price: parseFloat(
         document.getElementById("product-price").value
@@ -1746,14 +1753,14 @@ async function handleProductSubmit(event) {
 
       type,
 
-      category:
-        document.getElementById("product-category").value,
+      category: document
+        .getElementById("product-category")
+        .value,
 
-      description:
-        document
-          .getElementById("product-description")
-          .value
-          .trim(),
+      description: document
+        .getElementById("product-description")
+        .value
+        .trim(),
 
       badge:
         type === "fisico"
@@ -1765,10 +1772,8 @@ async function handleProductSubmit(event) {
           document.getElementById("product-stock").value
         ) || 0,
 
-      imageUrl:
-        imageInput.startsWith("http")
-          ? imageInput
-          : `${API_ROOT}/uploads/${imageInput}`
+      // SOLO EL NOMBRE
+      imageUrl: imageInput
     };
 
     if (
