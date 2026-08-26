@@ -1753,32 +1753,7 @@ function loadProductForm(product) {
       "Detalles del producto";
   }
 }
-/*
-function resetProductForm() {
-  const form =
-    document.getElementById(
-      "product-form"
-    );
 
-  if (form) {
-    form.reset();
-  }
-
-  document.getElementById(
-    "product-id"
-  ).value = "";
-
-  const title =
-    document.getElementById(
-      "product-form-title"
-    );
-
-  if (title) {
-    title.textContent =
-      "Nuevo producto";
-  }
-}
-*/
 
 function resetProductForm() {
 
@@ -1834,123 +1809,6 @@ function resetProductForm() {
   }
 }
 
-
-/*
-async function handleProductSubmit(event) {
-  event.preventDefault();
-
-  try {
-
-    const id =
-      document.getElementById(
-        "product-id"
-      ).value;
-
-    const type =
-      document.getElementById(
-        "product-type"
-      ).value;
-
-    let imageInput = document
-      .getElementById("product-image")
-      .value
-      .trim();
-
-      
-    // Obtener únicamente el nombre del archivo
-    if (imageInput) {
-      try {
-        imageInput = new URL(imageInput).pathname;
-      } catch {
-        // No es una URL, continuar
-      }
-
-      imageInput = imageInput
-        .split("/")
-        .pop()
-        .split("\\")
-        .pop()
-        .trim();
-    }
-
-    const product = {
-      name: document
-        .getElementById("product-name")
-        .value
-        .trim(),
-
-      price: parseFloat(
-        document.getElementById("product-price").value
-      ),
-
-      type,
-
-      category: document
-        .getElementById("product-category")
-        .value,
-
-      description: document
-        .getElementById("product-description")
-        .value
-        .trim(),
-
-      badge:
-        type === "fisico"
-          ? "Físico"
-          : "Digital",
-
-      stock:
-        parseInt(
-          document.getElementById("product-stock").value
-        ) || 0,
-
-      // SOLO EL NOMBRE
-      imageUrl: imageInput
-    };
-
-    if (
-      !product.name ||
-      !product.description
-    ) {
-      throw new Error(
-        "Nombre y descripción son obligatorios"
-      );
-    }
-
-    if (id) {
-      await updateProduct(id, product);
-
-      showToast(
-        "Producto actualizado",
-        "success"
-      );
-
-    } else {
-      await createProduct(product);
-
-      showToast(
-        "Producto creado",
-        "success"
-      );
-    }
-
-    resetProductForm();
-
-    await fetchProducts();
-
-    renderProductsAdmin();
-
-  } catch (error) {
-    console.error(error);
-
-    showToast(
-      error.message ||
-      "Error guardando producto",
-      "error"
-    );
-  }
-}
-*/
 
 async function handleProductSubmit(event) {
 
@@ -2204,6 +2062,268 @@ async function handleProductSubmit(event) {
     }
   }
 }
+
+/************************************************
+ * ELEMENTOS DEL FORMULARIO DE PRODUCTOS
+ ************************************************/
+const productForm = document.getElementById("product-form");
+const btnNewProduct = document.getElementById("btn-new-product-trigger");
+const btnCancelEdit = document.getElementById("btn-cancel-edit");
+
+const productId = document.getElementById("product-id");
+const productName = document.getElementById("product-name");
+const productPrice = document.getElementById("product-price");
+const productType = document.getElementById("product-type");
+const productCategory = document.getElementById("product-category");
+const productStock = document.getElementById("product-stock");
+const productDescription = document.getElementById("product-description");
+const productImage = document.getElementById("product-image");
+const productImagePreview = document.getElementById("product-image-preview");
+
+const productFormTitle = document.getElementById("product-form-title");
+const productAdminMessage = document.getElementById("product-admin-message");
+
+
+/************************************************
+ * + NUEVO PRODUCTO
+ ************************************************/
+btnNewProduct?.addEventListener("click", function () {
+
+    console.log("Botón Nuevo Producto presionado");
+
+    // Limpiar formulario
+    productForm.reset();
+
+    // Limpiar ID
+    productId.value = "";
+
+    // Valores por defecto
+    productType.value = "fisico";
+    productStock.value = "10";
+
+    // Ocultar preview
+    productImagePreview.src = "";
+    productImagePreview.style.display = "none";
+
+    // Cambiar título
+    productFormTitle.textContent = "Nuevo Producto";
+
+    // Limpiar mensaje
+    productAdminMessage.textContent = "";
+    productAdminMessage.className = "update-message";
+
+    // Enfocar nombre
+    productName.focus();
+
+});
+
+
+/************************************************
+ * BOTÓN LIMPIAR / CANCELAR
+ ************************************************/
+btnCancelEdit?.addEventListener("click", function () {
+
+    productForm.reset();
+
+    productId.value = "";
+
+    productType.value = "fisico";
+    productStock.value = "10";
+
+    productImagePreview.src = "";
+    productImagePreview.style.display = "none";
+
+    productFormTitle.textContent = "Detalles del Producto";
+
+    productAdminMessage.textContent = "";
+
+});
+
+
+/************************************************
+ * PREVIEW DE IMAGEN
+ ************************************************/
+productImage?.addEventListener("input", function () {
+
+    const url = productImage.value.trim();
+
+    if (url) {
+
+        productImagePreview.src = url;
+        productImagePreview.style.display = "block";
+
+        productImagePreview.onerror = function () {
+            productImagePreview.style.display = "none";
+        };
+
+    } else {
+
+        productImagePreview.src = "";
+        productImagePreview.style.display = "none";
+
+    }
+
+});
+
+
+/************************************************
+ * GUARDAR PRODUCTO
+ * POST = NUEVO
+ * PUT = EDITAR
+ ************************************************/
+productForm?.addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        productAdminMessage.textContent =
+            "No hay sesión activa. Inicia sesión como administrador.";
+        return;
+    }
+
+    const id = productId.value.trim();
+
+    const product = {
+
+        name: productName.value.trim(),
+
+        type: productType.value,
+
+        category: productCategory.value.trim(),
+
+        price: Number(productPrice.value),
+
+        description: productDescription.value.trim(),
+
+        badge: "",
+
+        stock: Number(productStock.value),
+
+        imageUrl: productImage.value.trim()
+
+    };
+
+
+    console.log("Producto a guardar:", product);
+
+
+    try {
+
+        let url;
+        let method;
+
+        /***************************************
+         * SI EXISTE ID = EDITAR
+         ***************************************/
+        if (id) {
+
+            url = `${API_URL}/api/products/${id}`;
+            method = "PUT";
+
+        }
+
+        /***************************************
+         * SIN ID = CREAR
+         ***************************************/
+        else {
+
+            url = `${API_URL}/api/products`;
+            method = "POST";
+
+        }
+
+
+        console.log("Método:", method);
+        console.log("URL:", url);
+
+
+        const response = await fetch(url, {
+
+            method: method,
+
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+
+            body: JSON.stringify(product)
+
+        });
+
+
+        const data = await response.json();
+
+        console.log("Respuesta API:", data);
+
+
+        if (!response.ok) {
+
+            console.error("Error API:", data);
+
+            productAdminMessage.textContent =
+                data.message ||
+                "No fue posible guardar el producto.";
+
+            productAdminMessage.style.color = "red";
+
+            return;
+        }
+
+
+        /***************************************
+         * PRODUCTO GUARDADO
+         ***************************************/
+        productAdminMessage.textContent =
+            id
+                ? "Producto actualizado correctamente."
+                : "Producto creado correctamente.";
+
+        productAdminMessage.style.color = "green";
+
+
+        /***************************************
+         * LIMPIAR FORMULARIO
+         ***************************************/
+        productForm.reset();
+
+        productId.value = "";
+
+        productType.value = "fisico";
+        productStock.value = "10";
+
+        productImagePreview.src = "";
+        productImagePreview.style.display = "none";
+
+        productFormTitle.textContent = "Detalles del Producto";
+
+
+        /***************************************
+         * RECARGAR PRODUCTOS
+         ***************************************/
+        if (typeof loadProducts === "function") {
+
+            await loadProducts();
+
+        }
+
+    }
+    catch (error) {
+
+        console.error("Error:", error);
+
+        productAdminMessage.textContent =
+            "Error de conexión con la API.";
+
+        productAdminMessage.style.color = "red";
+
+    }
+
+});
+
+
+
 
 
 /*********************
