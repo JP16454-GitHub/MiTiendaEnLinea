@@ -22,6 +22,7 @@ const defaultConfig = {
   font_size: 14
 };
 
+/*
 //Crea un controlador de aborto y un temporizador de 15 segundos para cancelar peticiones 
 // que excedan ese tiempo (timeout global).
 const controller =
@@ -31,6 +32,7 @@ const timeout =
   setTimeout(() => {
     controller.abort();
   }, 15000);
+  */
 
 //Copia el objeto defaultConfig en currentConfig usando el operador spread, 
 // permitiendo modificaciones sin alterar el objeto original.
@@ -374,7 +376,7 @@ async function fetchProducts() {
     showToast("Error cargando productos", "error");
   }
 }
-
+/*
 async function createProduct(product) {
   return await apiRequest("/products", {
     method: "POST",
@@ -385,6 +387,40 @@ async function createProduct(product) {
 async function updateProduct(id, product) {
   return await apiRequest(`/products/${id}`, {
     method: "PUT",
+    body: product
+  });
+}
+
+async function removeProductApi(id) {
+  return await apiRequest(`/products/${id}`, {
+    method: "DELETE"
+  });
+}
+  */
+
+
+async function createProduct(product) {
+  console.log("📤 POST /products");
+  console.log("📦 Producto enviado:", product);
+
+  return await apiRequest("/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: product
+  });
+}
+
+async function updateProduct(id, product) {
+  console.log(`📤 PUT /products/${id}`);
+  console.log("📦 Producto enviado:", product);
+
+  return await apiRequest(`/products/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: product
   });
 }
@@ -592,8 +628,8 @@ function updateUIForUser() {
                 .trim()
                 .toLowerCase();
 
-        const isAdmin =
-            role === "admin";
+        //const isAdmin =role === "admin";
+        const admin = isAdmin();
 
 
         // ==========================================
@@ -1717,7 +1753,7 @@ function loadProductForm(product) {
       "Detalles del producto";
   }
 }
-
+/*
 function resetProductForm() {
   const form =
     document.getElementById(
@@ -1742,7 +1778,64 @@ function resetProductForm() {
       "Nuevo producto";
   }
 }
+*/
 
+function resetProductForm() {
+
+  const form =
+    document.getElementById("product-form");
+
+  if (form) {
+    form.reset();
+  }
+
+  const id =
+    document.getElementById("product-id");
+
+  if (id) {
+    id.value = "";
+  }
+
+  const title =
+    document.getElementById("product-form-title");
+
+  if (title) {
+    title.textContent = "Nuevo producto";
+  }
+
+  // Valores predeterminados
+
+  const type =
+    document.getElementById("product-type");
+
+  if (type) {
+    type.value = "fisico";
+  }
+
+  const stock =
+    document.getElementById("product-stock");
+
+  if (stock) {
+    stock.value = "0";
+  }
+
+  const price =
+    document.getElementById("product-price");
+
+  if (price) {
+    price.value = "";
+  }
+
+  const image =
+    document.getElementById("product-image");
+
+  if (image) {
+    image.value = "";
+  }
+}
+
+
+/*
 async function handleProductSubmit(event) {
   event.preventDefault();
 
@@ -1849,6 +1942,224 @@ async function handleProductSubmit(event) {
 
   } catch (error) {
     console.error(error);
+
+    showToast(
+      error.message ||
+      "Error guardando producto",
+      "error"
+    );
+  }
+}
+*/
+
+async function handleProductSubmit(event) {
+
+  event.preventDefault();
+
+  const form = event.target;
+
+  try {
+
+    /********************************
+     * OBTENER ID
+     ********************************/
+
+    const id =
+      document.getElementById("product-id")?.value.trim() || "";
+
+
+    /********************************
+     * OBTENER DATOS DEL FORMULARIO
+     ********************************/
+
+    const name =
+      document.getElementById("product-name")?.value.trim() || "";
+
+    const price =
+      parseFloat(
+        document.getElementById("product-price")?.value
+      );
+
+    const type =
+      document.getElementById("product-type")?.value || "fisico";
+
+    const category =
+      document.getElementById("product-category")?.value.trim() || "";
+
+    const description =
+      document
+        .getElementById("product-description")
+        ?.value
+        .trim() || "";
+
+    const stock =
+      parseInt(
+        document.getElementById("product-stock")?.value
+      ) || 0;
+
+    let imageInput =
+      document
+        .getElementById("product-image")
+        ?.value
+        .trim() || "";
+
+
+    /********************************
+     * VALIDACIONES
+     ********************************/
+
+    if (!name) {
+      throw new Error(
+        "El nombre del producto es obligatorio."
+      );
+    }
+
+    if (isNaN(price) || price < 0) {
+      throw new Error(
+        "Ingresa un precio válido."
+      );
+    }
+
+    if (!description) {
+      throw new Error(
+        "La descripción del producto es obligatoria."
+      );
+    }
+
+    if (stock < 0) {
+      throw new Error(
+        "El stock no puede ser negativo."
+      );
+    }
+
+
+    /********************************
+     * NORMALIZAR IMAGEN
+     ********************************/
+
+    if (imageInput) {
+
+      try {
+
+        // Si se escribió una URL completa
+        imageInput =
+          new URL(imageInput).pathname;
+
+      } catch {
+
+        // No es una URL, se conserva
+      }
+
+      imageInput =
+        imageInput
+          .split("/")
+          .pop()
+          .split("\\")
+          .pop()
+          .trim();
+    }
+
+
+    /********************************
+     * CREAR OBJETO PRODUCTO
+     ********************************/
+
+    const product = {
+
+      name: name,
+
+      price: price,
+
+      type: type,
+
+      category: category,
+
+      description: description,
+
+      badge:
+        type.toLowerCase() === "fisico"
+          ? "Físico"
+          : "Digital",
+
+      stock: stock,
+
+      imageUrl: imageInput || null
+    };
+
+
+    console.log("=================================");
+    console.log(
+      id
+        ? "✏️ ACTUALIZANDO PRODUCTO"
+        : "➕ CREANDO PRODUCTO"
+    );
+    console.log("=================================");
+
+    console.log("ID:", id);
+    console.log("Producto:", product);
+
+
+    /********************************
+     * CREAR / ACTUALIZAR
+     ********************************/
+
+    let result;
+
+    if (id) {
+
+      result =
+        await updateProduct(
+          id,
+          product
+        );
+
+      showToast(
+        "Producto actualizado correctamente",
+        "success"
+      );
+
+    } else {
+
+      result =
+        await createProduct(
+          product
+        );
+
+      showToast(
+        "Producto creado correctamente",
+        "success"
+      );
+    }
+
+
+    console.log(
+      "✅ RESPUESTA API:",
+      result
+    );
+
+
+    /********************************
+     * LIMPIAR FORMULARIO
+     ********************************/
+
+    resetProductForm();
+
+
+    /********************************
+     * RECARGAR PRODUCTOS
+     ********************************/
+
+    await fetchProducts();
+
+    renderProductsAdmin();
+
+
+  } catch (error) {
+
+    console.error(
+      "❌ ERROR GUARDANDO PRODUCTO:",
+      error
+    );
 
     showToast(
       error.message ||
@@ -2823,7 +3134,7 @@ function showOrderDetail(order) {
 /*********************
  * SUCCESS PAGE      *
  *********************/
-/*
+
 function getQueryParams() {
   const params =
     new URLSearchParams(
@@ -2907,7 +3218,7 @@ function renderSuccess(order) {
     </p>
   `;
 }
-*/
+
 
 /*********************
  * EVENTOS           *
@@ -2955,6 +3266,15 @@ function initEvents() {
         setActiveTab("users");
       }
     });
+
+  document
+    .getElementById("btn-new-product")
+    ?.addEventListener("click", () => {
+
+      resetProductForm();
+
+    });
+
 
   document
     .getElementById(
@@ -3361,7 +3681,7 @@ async function updateOrderStatus(orderId, newStatus) {
     );
 
     // Recargar pedidos
-    await fetchOrders();
+    //await fetchOrders();
 
     // Volver a pintar la vista
     await renderOrders();
