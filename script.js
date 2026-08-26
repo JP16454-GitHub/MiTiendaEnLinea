@@ -1945,10 +1945,23 @@ async function fetchUsers() {
 
 async function updateUser(id, user) {
 
-  return await apiRequest(`/users/${id}`, {
-    method: "PUT",
-    body: user
-  });
+    console.log(
+        "📤 Actualizando usuario:",
+        id
+    );
+
+    console.log(
+        "📦 Payload:",
+        user
+    );
+
+    return await apiRequest(
+        `/users/${id}`,
+        {
+            method: "PUT",
+            body: user
+        }
+    );
 }
 
 async function renderUsers() {
@@ -2238,85 +2251,179 @@ function showUserDetail(user) {
 
 function loadUserForm(user) {
 
-  if (!user) {
-    showToast("Usuario inválido", "error");
-    return;
-  }
+    if (!user) {
 
-  currentSelectedUser = user;
+        console.error(
+            "Usuario inválido"
+        );
 
-  // ==========================================
-  // ELEMENTOS DEL FORMULARIO
-  // ==========================================
+        showToast(
+            "Usuario inválido",
+            "error"
+        );
 
-  const editEmpty =
-    document.getElementById("user-edit-empty");
+        return;
+    }
 
-  const editForm =
-    document.getElementById("user-edit-form");
 
-  if (!editForm) {
-    console.error("No existe #user-edit-form");
-    return;
-  }
+    console.log(
+        "✏️ Cargando usuario para editar:",
+        user
+    );
 
-  // ==========================================
-  // CARGAR DATOS
-  // ==========================================
 
-  const nombre =
-    document.getElementById("edit-user-nombre");
+    currentSelectedUser = user;
 
-  const email =
-    document.getElementById("edit-user-email");
 
-  const direccion =
-    document.getElementById("edit-user-direccion");
+    // ============================================
+    // ELEMENTOS DEL FORMULARIO
+    // ============================================
 
-  const ciudad =
-    document.getElementById("edit-user-ciudad");
+    const emptyMessage =
+        document.getElementById(
+            "user-edit-empty"
+        );
 
-  const estado =
-    document.getElementById("edit-user-estado");
+    const form =
+        document.getElementById(
+            "user-edit-form"
+        );
 
-  const cp =
-    document.getElementById("edit-user-cp");
 
-  if (nombre) {
-    nombre.value = user.nombre || "";
-  }
+    if (!form) {
 
-  if (email) {
-    email.value = user.email || "";
-  }
+        console.error(
+            "❌ No existe #user-edit-form"
+        );
 
-  if (direccion) {
-    direccion.value = user.direccion || "";
-  }
+        return;
+    }
 
-  if (ciudad) {
-    ciudad.value = user.ciudad || "";
-  }
 
-  if (estado) {
-    estado.value = user.estado || "";
-  }
+    // ============================================
+    // MOSTRAR FORMULARIO
+    // ============================================
 
-  if (cp) {
-    cp.value = user.cp || "";
-  }
+    if (emptyMessage) {
 
-  // ==========================================
-  // MOSTRAR FORMULARIO
-  // ==========================================
+        emptyMessage.classList.add(
+            "hidden"
+        );
+    }
 
-  if (editEmpty) {
-    editEmpty.classList.add("hidden");
-  }
+    form.classList.remove(
+        "hidden"
+    );
 
-  editForm.classList.remove("hidden");
 
-  console.log("✏️ Usuario cargado para edición:", user);
+    // ============================================
+    // CARGAR DATOS
+    // ============================================
+
+    const nombre =
+        document.getElementById(
+            "edit-user-nombre"
+        );
+
+    const email =
+        document.getElementById(
+            "edit-user-email"
+        );
+
+    const role =
+        document.getElementById(
+            "edit-user-role"
+        );
+
+    const direccion =
+        document.getElementById(
+            "edit-user-direccion"
+        );
+
+    const ciudad =
+        document.getElementById(
+            "edit-user-ciudad"
+        );
+
+    const estado =
+        document.getElementById(
+            "edit-user-estado"
+        );
+
+    const cp =
+        document.getElementById(
+            "edit-user-cp"
+        );
+
+
+    if (nombre) {
+
+        nombre.value =
+            user.nombre || "";
+    }
+
+
+    if (email) {
+
+        email.value =
+            user.email || "";
+    }
+
+
+    if (role) {
+
+        role.value =
+            user.role || "Cliente";
+    }
+
+
+    if (direccion) {
+
+        direccion.value =
+            user.direccion || "";
+    }
+
+
+    if (ciudad) {
+
+        ciudad.value =
+            user.ciudad || "";
+    }
+
+
+    if (estado) {
+
+        estado.value =
+            user.estado || "";
+    }
+
+
+    if (cp) {
+
+        cp.value =
+            user.cp || "";
+    }
+
+
+    // ============================================
+    // LIMPIAR MENSAJE
+    // ============================================
+
+    const message =
+        document.getElementById(
+            "user-edit-message"
+        );
+
+    if (message) {
+
+        message.textContent = "";
+    }
+
+
+    console.log(
+        "✅ Usuario cargado en formulario:",
+        user.id
+    );
 }
 
 
@@ -2678,6 +2785,7 @@ function showOrderDetail(order) {
 /*********************
  * SUCCESS PAGE      *
  *********************/
+/*
 function getQueryParams() {
   const params =
     new URLSearchParams(
@@ -2761,6 +2869,7 @@ function renderSuccess(order) {
     </p>
   `;
 }
+*/
 
 /*********************
  * EVENTOS           *
@@ -3238,6 +3347,251 @@ async function updateOrderStatus(orderId, newStatus) {
   }
 }
 
+function initializeUserEditForm() {
+
+    const form =
+        document.getElementById(
+            "user-edit-form"
+        );
+
+    if (!form) {
+
+        console.error(
+            "❌ No existe #user-edit-form"
+        );
+
+        return;
+    }
+
+
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            if (!currentSelectedUser) {
+
+                showToast(
+                    "Selecciona un usuario primero.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            try {
+
+                const id =
+                    currentSelectedUser.id;
+
+
+                // ====================================
+                // OBTENER DATOS
+                // ====================================
+
+                const payload = {
+
+                    nombre:
+                        document
+                            .getElementById(
+                                "edit-user-nombre"
+                            )
+                            ?.value
+                            .trim() || "",
+
+
+                    email:
+                        document
+                            .getElementById(
+                                "edit-user-email"
+                            )
+                            ?.value
+                            .trim() || "",
+
+
+                    role:
+                        document
+                            .getElementById(
+                                "edit-user-role"
+                            )
+                            ?.value || "Cliente",
+
+
+                    direccion:
+                        document
+                            .getElementById(
+                                "edit-user-direccion"
+                            )
+                            ?.value
+                            .trim() || "",
+
+
+                    ciudad:
+                        document
+                            .getElementById(
+                                "edit-user-ciudad"
+                            )
+                            ?.value
+                            .trim() || "",
+
+
+                    estado:
+                        document
+                            .getElementById(
+                                "edit-user-estado"
+                            )
+                            ?.value
+                            .trim() || "",
+
+
+                    cp:
+                        document
+                            .getElementById(
+                                "edit-user-cp"
+                            )
+                            ?.value
+                            .trim() || ""
+                };
+
+
+                console.log(
+                    "📤 PUT usuario:",
+                    id
+                );
+
+                console.log(
+                    "📦 Datos enviados:",
+                    payload
+                );
+
+
+                // ====================================
+                // VALIDACIONES
+                // ====================================
+
+                if (!payload.nombre) {
+
+                    throw new Error(
+                        "El nombre es obligatorio."
+                    );
+                }
+
+
+                if (!payload.email) {
+
+                    throw new Error(
+                        "El email es obligatorio."
+                    );
+                }
+
+
+                // ====================================
+                // ACTUALIZAR API
+                // ====================================
+
+                const result =
+                    await updateUser(
+                        id,
+                        payload
+                    );
+
+
+                console.log(
+                    "✅ Respuesta actualización:",
+                    result
+                );
+
+
+                // ====================================
+                // MENSAJE
+                // ====================================
+
+                const message =
+                    document.getElementById(
+                        "user-edit-message"
+                    );
+
+
+                if (message) {
+
+                    message.textContent =
+                        result.message ||
+                        "Usuario actualizado correctamente.";
+                }
+
+
+                showToast(
+                    result.message ||
+                    "Usuario actualizado correctamente.",
+                    "success"
+                );
+
+
+                // ====================================
+                // ACTUALIZAR USUARIO SELECCIONADO
+                // ====================================
+
+                if (result.user) {
+
+                    currentSelectedUser =
+                        result.user;
+                }
+
+
+                // ====================================
+                // RECARGAR LISTA
+                // ====================================
+
+                await renderUsers();
+
+
+                // ====================================
+                // ACTUALIZAR DETALLE
+                // ====================================
+
+                if (currentSelectedUser) {
+
+                    showUserDetail(
+                        currentSelectedUser
+                    );
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "❌ Error actualizando usuario:",
+                    error
+                );
+
+
+                const message =
+                    document.getElementById(
+                        "user-edit-message"
+                    );
+
+
+                if (message) {
+
+                    message.textContent =
+                        error.message ||
+                        "Error actualizando usuario.";
+                }
+
+
+                showToast(
+                    error.message ||
+                    "Error actualizando usuario.",
+                    "error"
+                );
+            }
+
+        }
+    );
+}
 
 
 
@@ -3247,6 +3601,7 @@ async function updateOrderStatus(orderId, newStatus) {
 async function main() {
 
   initEvents();
+  initializeUserEditForm();
 
   await fetchProducts();
 
