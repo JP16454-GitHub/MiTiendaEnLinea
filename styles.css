@@ -1804,3 +1804,50 @@ body {
         object-fit: contain;
     }
 }
+
+/* FILTROS EN MÓVIL */
+@media (max-width: 600px) {
+
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .filter-btn {
+        padding: 7px 12px;
+        font-size: 0.85em;
+    }
+
+    /* Evita que los elementos de categorías
+       se salgan de la pantalla */
+    .filter-buttons select,
+    .category-filter,
+    #category-filter {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .product-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .product-card img {
+        height: 100px;
+        max-width: 100%;
+        object-fit: contain;
+    }
+}
+
