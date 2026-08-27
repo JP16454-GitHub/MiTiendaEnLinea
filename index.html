@@ -1,736 +1,2331 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Tienda En Línea prueba</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
-  <style>@view-transition { navigation: auto; }</style>
-  <link rel="icon" href="data:,">
-  <link rel="icon" href="/favicon.ico">
-</head>
-<body>
-  <div class="app-wrapper">
-    <!-- HEADER -->
-    <header class="main-header">
-      <div class="header-content">
-        <div class="logo-section">
-          <div class="logo-icon">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M7 4h10l2 5H5l2-5zm-2 7h14l-1.5 7h-11L5 11zm4 1v5h2v-5H9zm4 0v5h2v-5h-2z" />
-            </svg>
-          </div>
-          <div class="store-info">
-            <h1 id="store-title">Mi Tienda en Línea</h1>
-            <p id="store-subtitle">Vende productos físicos y digitales</p>
-          </div>
-        </div>
-        <nav class="main-nav" aria-label="Navegación principal">
-          <button id="tab-catalog" class="nav-btn active" type="button">Catálogo</button>
-          <button id="tab-checkout" class="nav-btn" type="button">Checkout</button>
-          <button id="tab-admin" class="nav-btn" type="button" disabled>Pedidos</button>
-          <button id="tab-users" class="nav-btn" type="button" disabled>Usuarios</button>
-          <button id="tab-products-admin" class="nav-btn" type="button">
-            Productos
-          </button>
 
-        </nav>
-        <div id="user-section" class="user-section" style="display: none;">
-          <div class="user-info">
-            <span id="user-name" class="user-name"></span>
-            <span id="user-role" class="user-role"></span>
-          </div>
-          <button id="logout-btn" class="logout-btn" type="button">Cerrar sesión</button>
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Tienda En Línea prueba</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
+    <style>
+        @view-transition {
+            navigation: auto;
+        }
+    </style>
+
+    <link rel="icon" href="data:,">
+
+    <link rel="icon" href="/favicon.ico">
+
+</head>
+
+
+<body>
+
+<div class="app-wrapper">
+
+
+    <!-- ======================================================
+         HEADER
+         ====================================================== -->
+
+    <header class="main-header">
+
+        <div class="header-content">
+
+
+            <!-- LOGO -->
+
+            <div class="logo-section">
+
+                <div class="logo-icon">
+
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path d="M7 4h10l2 5H5l2-5zm-2 7h14l-1.5 7h-11L5 11zm4 1v5h2v-5H9zm4 0v5h2v-5h-2z" />
+
+                    </svg>
+
+                </div>
+
+
+                <div class="store-info">
+
+                    <h1 id="store-title">
+                        Mi Tienda en Línea
+                    </h1>
+
+                    <p id="store-subtitle">
+                        Vende productos físicos y digitales
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- NAVEGACIÓN -->
+
+            <nav
+                class="main-nav"
+                aria-label="Navegación principal"
+            >
+
+                <button
+                    id="tab-catalog"
+                    class="nav-btn active"
+                    type="button"
+                >
+                    Catálogo
+                </button>
+
+
+                <button
+                    id="tab-checkout"
+                    class="nav-btn"
+                    type="button"
+                >
+                    Checkout
+                </button>
+
+
+                <button
+                    id="tab-admin"
+                    class="nav-btn"
+                    type="button"
+                    disabled
+                >
+                    Pedidos
+                </button>
+
+
+                <button
+                    id="tab-users"
+                    class="nav-btn"
+                    type="button"
+                    disabled
+                >
+                    Usuarios
+                </button>
+
+
+                <button
+                    id="tab-products-admin"
+                    class="nav-btn"
+                    type="button"
+                >
+                    Productos
+                </button>
+
+            </nav>
+
+
+            <!-- USUARIO -->
+
+            <div
+                id="user-section"
+                class="user-section"
+                style="display: none;"
+            >
+
+                <div class="user-info">
+
+                    <span
+                        id="user-name"
+                        class="user-name"
+                    ></span>
+
+                    <span
+                        id="user-role"
+                        class="user-role"
+                    ></span>
+
+                </div>
+
+
+                <button
+                    id="logout-btn"
+                    class="logout-btn"
+                    type="button"
+                >
+                    Cerrar sesión
+                </button>
+
+            </div>
+
+
+            <!-- CARRITO HEADER -->
+
+            <button
+                id="cart-toggle"
+                class="cart-toggle"
+                type="button"
+            >
+
+                <div class="cart-icon-wrapper">
+
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path d="M7 4h-2l-1 2h2l3 9h8l3-7h-13l-2-4zm2 15a1 1 0 1 0 .001-1.999A1 1 0 0 0 9 19zm8 0a1 1 0 1 0 .001-1.999A1 1 0 0 0 17 19z" />
+
+                    </svg>
+
+                </div>
+
+
+                <div class="cart-summary-text">
+
+                    <span
+                        id="cart-summary-count"
+                        class="cart-summary-count"
+                    >
+                        0 artículos
+                    </span>
+
+                    <span
+                        id="cart-summary-total"
+                        class="cart-summary-total"
+                    >
+                        $0.00 MXN
+                    </span>
+
+                </div>
+
+            </button>
+
         </div>
-        <button id="cart-toggle" class="cart-toggle" type="button">
-          <div class="cart-icon-wrapper">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M7 4h-2l-1 2h2l3 9h8l3-7h-13l-2-4zm2 15a1 1 0 1 0 .001-1.999A1 1 0 0 0 9 19zm8 0a1 1 0 1 0 .001-1.999A1 1 0 0 0 17 19z" />
-            </svg>
-          </div>
-          <div class="cart-summary-text">
-            <span id="cart-summary-count" class="cart-summary-count">0 artículos</span>
-            <span id="cart-summary-total" class="cart-summary-total">$0.00 MXN</span>
-          </div>
-        </button>
-      </div>
+
     </header>
 
-    <!-- MAIN CONTENT -->
+
+
+    <!-- ======================================================
+         MAIN
+         ====================================================== -->
+
     <main class="main-content">
-      <div class="content-grid">
 
-        <!-- SECCIÓN PRINCIPAL -->
-        <section class="main-section" aria-label="Contenido principal">
-          
-          <!-- VISTA AUTH -->
-          <div id="view-auth" class="view-container">
-            <div class="auth-container">
-              <div class="auth-box">
-                <h2>Bienvenido</h2>
-                <div class="auth-tabs">
-                  <button id="auth-tab-login" class="auth-tab active" type="button">Iniciar sesión</button>
-                  <button id="auth-tab-register" class="auth-tab" type="button">Registrarse</button>
+        <div class="content-grid">
+
+
+            <!-- ==================================================
+                 SECCIÓN PRINCIPAL
+                 ================================================== -->
+
+            <section
+                class="main-section"
+                aria-label="Contenido principal"
+            >
+
+
+                <!-- ==================================================
+                     AUTH
+                     ================================================== -->
+
+                <div
+                    id="view-auth"
+                    class="view-container"
+                >
+
+                    <div class="auth-container">
+
+                        <div class="auth-box">
+
+                            <h2>
+                                Bienvenido
+                            </h2>
+
+
+                            <div class="auth-tabs">
+
+                                <button
+                                    id="auth-tab-login"
+                                    class="auth-tab active"
+                                    type="button"
+                                >
+                                    Iniciar sesión
+                                </button>
+
+
+                                <button
+                                    id="auth-tab-register"
+                                    class="auth-tab"
+                                    type="button"
+                                >
+                                    Registrarse
+                                </button>
+
+                            </div>
+
+
+                            <!-- LOGIN -->
+
+                            <form
+                                id="login-form"
+                                class="auth-form"
+                            >
+
+                                <div class="form-group">
+
+                                    <label for="login-email">
+                                        Correo electrónico
+                                    </label>
+
+                                    <input
+                                        id="login-email"
+                                        name="email"
+                                        type="email"
+                                        autocomplete="email"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="login-password">
+                                        Contraseña
+                                    </label>
+
+                                    <input
+                                        id="login-password"
+                                        name="password"
+                                        type="password"
+                                        autocomplete="current-password"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    class="primary-btn"
+                                >
+                                    Iniciar sesión
+                                </button>
+
+
+                                <p
+                                    id="login-message"
+                                    class="auth-message"
+                                ></p>
+
+                            </form>
+
+
+                            <!-- REGISTRO -->
+
+                            <form
+                                id="register-form"
+                                class="auth-form hidden"
+                            >
+
+                                <div class="form-group">
+
+                                    <label for="register-nombre">
+                                        Nombre completo
+                                    </label>
+
+                                    <input
+                                        id="register-nombre"
+                                        name="nombre"
+                                        type="text"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="register-email">
+                                        Correo electrónico
+                                    </label>
+
+                                    <input
+                                        id="register-email"
+                                        name="email"
+                                        type="email"
+                                        autocomplete="email"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="register-password">
+                                        Contraseña
+                                    </label>
+
+                                    <input
+                                        id="register-password"
+                                        name="password"
+                                        type="password"
+                                        autocomplete="new-password"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- DIRECCIÓN -->
+
+                                <div id="register-address-fields">
+
+                                    <div class="form-group">
+
+                                        <label for="register-direccion">
+                                            Dirección
+                                        </label>
+
+                                        <input
+                                            id="register-direccion"
+                                            name="direccion"
+                                            type="text"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="form-row two-cols">
+
+                                        <div class="form-group">
+
+                                            <label for="register-ciudad">
+                                                Ciudad
+                                            </label>
+
+                                            <input
+                                                id="register-ciudad"
+                                                name="ciudad"
+                                                type="text"
+                                                required
+                                            >
+
+                                        </div>
+
+
+                                        <div class="form-group">
+
+                                            <label for="register-estado">
+                                                Estado
+                                            </label>
+
+                                            <input
+                                                id="register-estado"
+                                                name="estado"
+                                                type="text"
+                                                required
+                                            >
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="register-cp">
+                                            Código postal
+                                        </label>
+
+                                        <input
+                                            id="register-cp"
+                                            name="cp"
+                                            type="text"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    class="primary-btn"
+                                >
+                                    Registrarse
+                                </button>
+
+
+                                <p
+                                    id="register-message"
+                                    class="auth-message"
+                                ></p>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
                 </div>
-                <!-- LOGIN FORM -->
-                <form id="login-form" class="auth-form">
-                  <div class="form-group">
-                    <label for="login-email">Correo electrónico</label>
-                    <input id="login-email" name="email" type="email" autocomplete="email" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="login-password">Contraseña</label>
-                    <input id="login-password" name="password" type="password" autocomplete="current-password" required>
-                  </div>
-                  <button type="submit" class="primary-btn">Iniciar sesión</button>
-                  <p id="login-message" class="auth-message"></p>
-                </form>
-                <!-- REGISTER FORM -->
-                <form id="register-form" class="auth-form hidden">
-                  <div class="form-group">
-                    <label for="register-nombre">Nombre completo</label>
-                    <input id="register-nombre" name="nombre" type="text" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="register-email">Correo electrónico</label>
-                    <input id="register-email" name="email" type="email" autocomplete="email" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="register-password">Contraseña</label>
-                    <input id="register-password" name="password" type="password" autocomplete="new-password" required>
-                  </div>
 
-                  <!-- 🔒 Rol eliminado completamente -->
 
-                  <div id="register-address-fields">
-                    <div class="form-group">
-                      <label for="register-direccion">Dirección</label>
-                      <input id="register-direccion" name="direccion" type="text" required>
+
+                <!-- ==================================================
+                     CATÁLOGO
+                     ================================================== -->
+
+                <div
+                    id="view-catalog"
+                    class="view-container hidden"
+                >
+
+
+                    <!-- ENCABEZADO -->
+
+                    <div class="section-header">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Catálogo de productos
+                            </h2>
+
+                            <p class="section-subtitle">
+                                Explora nuestros productos físicos y digitales.
+                            </p>
+
+                        </div>
+
                     </div>
-                    <div class="form-row two-cols">
-                      <div class="form-group">
-                        <label for="register-ciudad">Ciudad</label>
-                        <input id="register-ciudad" name="ciudad" type="text" required>
-                      </div>
-                      <div class="form-group">
-                        <label for="register-estado">Estado</label>
-                        <input id="register-estado" name="estado" type="text" required>
-                      </div>
+
+
+                    <!-- BUSCADOR + FILTROS -->
+
+                    <div class="flex flex-col gap-4 mb-4">
+
+
+                        <!-- BUSCADOR -->
+
+                        <div class="w-full">
+
+                            <input
+                                id="product-search"
+                                type="text"
+                                placeholder="🔍 Buscar productos por nombre..."
+                                class="w-full p-4 search-input"
+                            >
+
+                        </div>
+
+
+                        <!-- FILTROS -->
+
+                        <div
+                            class="flex gap-4 flex-wrap items-center"
+                        >
+
+
+                            <!-- TIPO -->
+
+                            <div class="filter-buttons">
+
+                                <button
+                                    id="filter-all"
+                                    class="filter-btn active"
+                                    type="button"
+                                >
+                                    Todos
+                                </button>
+
+
+                                <button
+                                    id="filter-fisicos"
+                                    class="filter-btn"
+                                    type="button"
+                                >
+                                    Físicos
+                                </button>
+
+
+                                <button
+                                    id="filter-digitales"
+                                    class="filter-btn"
+                                    type="button"
+                                >
+                                    Digitales
+                                </button>
+
+                            </div>
+
+
+                            <!-- CATEGORÍA -->
+
+                            <select
+                                id="category-filter"
+                                class="select-filter"
+                            >
+
+                                <option value="all">
+                                    Todas las categorías
+                                </option>
+
+                                <option value="cocina">
+                                    Cocina
+                                </option>
+
+                                <option value="hogar">
+                                    Hogar
+                                </option>
+
+                                <option value="tecnologia">
+                                    Tecnologia
+                                </option>
+
+                                <option value="automovil">
+                                    Automovil
+                                </option>
+
+                                <option value="herramientas">
+                                    Herramientas
+                                </option>
+
+                                <option value="jardineria">
+                                    Jardineria
+                                </option>
+
+                                <option value="accesorios">
+                                    Accesorios
+                                </option>
+
+                                <option value="ropa">
+                                    Ropa
+                                </option>
+
+                                <option value="belleza">
+                                    Belleza
+                                </option>
+
+                                <option value="cursos">
+                                    Cursos
+                                </option>
+
+                                <option value="marketing">
+                                    Marketing
+                                </option>
+
+                                <option value="plantillas">
+                                    Plantillas
+                                </option>
+
+                                <option value="ebooks">
+                                    Ebooks
+                                </option>
+
+                                <option value="recursos">
+                                    Recursos
+                                </option>
+
+                                <option value="diseño">
+                                    Diseño
+                                </option>
+
+                                <option value="fotografia">
+                                    Fotografia
+                                </option>
+
+                                <option value="negocios">
+                                    Negocios
+                                </option>
+
+                            </select>
+
+
+                            <!-- PRECIO -->
+
+                            <select
+                                id="price-filter"
+                                class="select-filter"
+                            >
+
+                                <option value="all">
+                                    Todos los precios
+                                </option>
+
+                                <option value="0-200">
+                                    $0 - $200
+                                </option>
+
+                                <option value="201-500">
+                                    $201 - $500
+                                </option>
+
+                                <option value="501-1000">
+                                    $501 - $1,000
+                                </option>
+
+                                <option value="1001+">
+                                    Más de $1,000
+                                </option>
+
+                            </select>
+
+
+                            <!-- ORDEN -->
+
+                            <select
+                                id="sort-filter"
+                                class="select-filter"
+                            >
+
+                                <option value="default">
+                                    Ordenar por...
+                                </option>
+
+                                <option value="name-asc">
+                                    Nombre (A-Z)
+                                </option>
+
+                                <option value="name-desc">
+                                    Nombre (Z-A)
+                                </option>
+
+                                <option value="price-asc">
+                                    Precio (menor a mayor)
+                                </option>
+
+                                <option value="price-desc">
+                                    Precio (mayor a menor)
+                                </option>
+
+                            </select>
+
+
+                            <!-- LIMPIAR -->
+
+                            <button
+                                id="clear-filters-btn"
+                                type="button"
+                                class="secondary-btn clear-filters-btn"
+                            >
+                                🔄 Limpiar filtros
+                            </button>
+
+                        </div>
+
+
+                        <!-- CONTADOR -->
+
+                        <div class="products-count-text">
+
+                            <span id="products-count">
+                                0
+                            </span>
+
+                            productos encontrados
+
+                        </div>
+
                     </div>
-                    <div class="form-group">
-                      <label for="register-cp">Código postal</label>
-                      <input id="register-cp" name="cp" type="text" required>
-                    </div>
-                  </div>
 
-                  <button type="submit" class="primary-btn">Registrarse</button>
-                  <p id="register-message" class="auth-message"></p>
-                </form>
 
-              </div>
-            </div>
-          </div>
+                    <!-- ==================================================
+                         LISTADO CON SCROLL
+                         ================================================== -->
 
-          <!-- VISTA CATÁLOGO -->
-          <div id="view-catalog" class="view-container hidden">
-            <div class="section-header">
-              <div>
-                <h2 class="section-title">Catálogo de productos</h2>
-                <p class="section-subtitle">Explora nuestros productos físicos y digitales.</p>
-              </div>
-            </div>
-            
-            <div class="flex flex-col gap-4 mb-4">
-              <div class="w-full">
-                <input id="product-search" type="text" placeholder="🔍 Buscar productos por nombre..." class="w-full p-4 search-input">
-              </div>
-              
-              <div class="flex gap-4 flex-wrap items-center">
-                <div class="flex gap-2">
-                  <button id="filter-all" class="filter-btn active" type="button">Todos</button>
-                  <button id="filter-fisicos" class="filter-btn" type="button">Físicos</button>
-                  <button id="filter-digitales" class="filter-btn" type="button">Digitales</button>
+                    <div
+                        id="product-list"
+                        class="product-grid"
+                    ></div>
+
                 </div>
-                
-                <select id="category-filter" class="select-filter">
-                  <option value="all">Todas las categorías</option>
-                  <option value="cocina">Cocina</option>
-                  <option value="hogar">Hogar</option>
-                  <option value="tecnologia">Tecnologia</option>
-                  <option value="automovil">Automovil</option>
-                  <option value="herramientas">Herramientas</option>
-                  <option value="jardineria">Jardineria</option>
-                  <option value="accesorios">Accesorios</option>
-                  <option value="ropa">Ropa</option>
-                  <option value="belleza">Belleza</option>
-                  <option value="cursos">Cursos</option>
-                  <option value="marketing">Marketing</option>
-                  <option value="plantillas">Plantillas</option>
-                  <option value="ebooks">Ebooks</option>
-                  <option value="recursos">Recursos</option>
-                  <option value="diseño">Diseño</option>
-                  <option value="fotografia">Fotografia</option>
-                  <option value="negocios">Negocios</option>
-                </select>
-                
-                <select id="price-filter" class="select-filter">
-                  <option value="all">Todos los precios</option>
-                  <option value="0-200">$0 - $200</option>
-                  <option value="201-500">$201 - $500</option>
-                  <option value="501-1000">$501 - $1,000</option>
-                  <option value="1001+">Más de $1,000</option>
-                </select>
-                
-                <select id="sort-filter" class="select-filter">
-                  <option value="default">Ordenar por...</option>
-                  <option value="name-asc">Nombre (A-Z)</option>
-                  <option value="name-desc">Nombre (Z-A)</option>
-                  <option value="price-asc">Precio (menor a mayor)</option>
-                  <option value="price-desc">Precio (mayor a menor)</option>
-                </select>
-                
-                <button id="clear-filters-btn" type="button" class="secondary-btn clear-filters-btn">🔄 Limpiar filtros</button>
-              </div>
-              
-              <div class="products-count-text">
-                <span id="products-count">0</span> productos encontrados
-              </div>
-            </div>
-            
-            <div id="product-list" class="product-grid"></div>
-          </div>
 
-          <!-- VISTA CHECKOUT -->
-          <div id="view-checkout" class="view-container hidden">
-            
-           
 
-            <div class="section-header">
-              <div>
-                <h2 id="checkout-title" class="section-title">Finalizar compra</h2>
-                <p class="section-subtitle">Revisa tu pedido y completa la información de envío.</p>
-              </div>
-            </div>
-            
-            <div class="checkout-grid">
-              <div class="checkout-box summary-box">
-                <h2>Resumen de carrito <span id="checkout-items-count" class="checkout-items-count" style="margin-left:30px;"> 0 artículos</span></h2>
-                <div id="checkout-cart-list" class="checkout-items-list"></div>
+
+                <!-- ==================================================
+                     CHECKOUT
+                     ================================================== -->
+
+                <div
+                    id="view-checkout"
+                    class="view-container hidden"
+                >
+
+                    <div class="section-header">
+
+                        <div>
+
+                            <h2
+                                id="checkout-title"
+                                class="section-title"
+                            >
+                                Finalizar compra
+                            </h2>
+
+                            <p class="section-subtitle">
+                                Revisa tu pedido y completa la información de envío.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="checkout-grid">
+
+
+                        <!-- RESUMEN -->
+
+                        <div class="checkout-box summary-box">
+
+                            <h2>
+
+                                Resumen de carrito
+
+                                <span
+                                    id="checkout-items-count"
+                                    class="checkout-items-count"
+                                    style="margin-left:30px;"
+                                >
+                                    0 artículos
+                                </span>
+
+                            </h2>
+
+
+                            <div
+                                id="checkout-cart-list"
+                                class="checkout-items-list"
+                            ></div>
+
+
+                            <div class="cart-summary">
+
+                                <div class="cart-summary-row">
+
+                                    <span class="cart-summary-label">
+                                        Subtotal
+                                    </span>
+
+                                    <span
+                                        id="checkout-subtotal"
+                                        class="cart-summary-value"
+                                    >
+                                        $0.00 MXN
+                                    </span>
+
+                                </div>
+
+
+                                <div class="cart-summary-row">
+
+                                    <span class="cart-summary-label">
+                                        Envío estimado
+                                    </span>
+
+                                    <span
+                                        id="checkout-shipping"
+                                        class="cart-summary-value"
+                                    >
+                                        $0.00 MXN
+                                    </span>
+
+                                </div>
+
+
+                                <div class="cart-summary-row cart-summary-total">
+
+                                    <span>
+                                        Total
+                                    </span>
+
+                                    <span
+                                        id="checkout-total"
+                                        class="cart-summary-value"
+                                    >
+                                        $0.00 MXN
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DATOS DE ENVÍO -->
+
+                        <div class="checkout-box">
+
+                            <h3>
+                                Datos de envío
+                            </h3>
+
+
+                            <form
+                                id="shipping-form"
+                                class="checkout-form"
+                            >
+
+
+                                <div class="form-row two-cols">
+
+                                    <div class="form-group">
+
+                                        <label for="nombre">
+                                            Nombre completo
+                                        </label>
+
+                                        <input
+                                            id="nombre"
+                                            name="nombre"
+                                            type="text"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="email">
+                                            Correo electrónico
+                                        </label>
+
+                                        <input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            required
+                                            readonly
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="direccion">
+                                        Dirección
+                                    </label>
+
+                                    <input
+                                        id="direccion"
+                                        name="direccion"
+                                        type="text"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-row three-cols">
+
+                                    <div class="form-group">
+
+                                        <label for="ciudad">
+                                            Ciudad
+                                        </label>
+
+                                        <input
+                                            id="ciudad"
+                                            name="ciudad"
+                                            type="text"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="estado">
+                                            Estado / Provincia
+                                        </label>
+
+                                        <input
+                                            id="estado"
+                                            name="estado"
+                                            type="text"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="cp">
+                                            Código postal
+                                        </label>
+
+                                        <input
+                                            id="cp"
+                                            name="cp"
+                                            type="text"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="envio">
+                                        Método de envío
+                                    </label>
+
+                                    <select
+                                        id="envio"
+                                        name="envio"
+                                    >
+
+                                        <option value="standard">
+                                            Estándar (3-5 días) - $99 MXN
+                                        </option>
+
+                                        <option value="express">
+                                            Express (1-2 días) - $169 MXN
+                                        </option>
+
+                                        <option value="digital">
+                                            Solo productos digitales - $0 MXN
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h4 class="payment-title">
+                                        Método de pago
+                                    </h4>
+
+
+                                    <div class="payment-options">
+
+                                        <label class="payment-option">
+
+                                            <input
+                                                type="radio"
+                                                name="pago"
+                                                value="tarjeta"
+                                                checked
+                                            >
+
+                                            <span>
+                                                Tarjeta de crédito/débito
+                                            </span>
+
+                                        </label>
+
+
+                                        <label class="payment-option">
+
+                                            <input
+                                                type="radio"
+                                                name="pago"
+                                                value="oxxo"
+                                            >
+
+                                            <span>
+                                                OXXO
+                                            </span>
+
+                                        </label>
+
+
+                                        <label class="payment-option">
+
+                                            <input
+                                                type="radio"
+                                                name="pago"
+                                                value="transferencia"
+                                            >
+
+                                            <span>
+                                                Transferencia bancaria
+                                            </span>
+
+                                        </label>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    id="payment-info"
+                                    class="payment-info-box"
+                                >
+
+                                    <div id="dropin-container"></div>
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    class="action-btn"
+                                >
+                                    Confirmar pedido
+                                </button>
+
+
+                                <p
+                                    id="checkout-message"
+                                    class="checkout-message"
+                                ></p>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     USUARIOS
+                     ================================================== -->
+
+                <div
+                    id="view-users"
+                    class="view-container hidden"
+                >
+
+                    <div class="section-header">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Administración de usuarios
+                            </h2>
+
+                            <p class="section-subtitle">
+                                Gestiona los clientes registrados en la plataforma.
+                            </p>
+
+                        </div>
+
+
+                        <div class="admin-stats">
+
+                            <p>
+                                Total clientes:
+                                <span id="users-count">0</span>
+                            </p>
+
+                            <p>
+                                Total administradores:
+                                <span id="admins-count">0</span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4 mb-4 flex-wrap">
+
+                        <div class="search-container">
+
+                            <input
+                                id="user-search"
+                                type="text"
+                                placeholder="Buscar por nombre o email..."
+                                class="w-full p-4 search-input"
+                            >
+
+                        </div>
+
+
+                        <select
+                            id="user-role-filter"
+                            class="select-filter user-select"
+                        >
+
+                            <option value="all">
+                                Todos los roles
+                            </option>
+
+                            <option value="cliente">
+                                Solo clientes
+                            </option>
+
+                            <option value="admin">
+                                Solo administradores
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            id="export-users-btn"
+                            type="button"
+                            class="action-btn export-btn"
+                        >
+                            📊 Exportar CSV
+                        </button>
+
+                    </div>
+
+
+                    <div class="admin-grid">
+
+                        <div class="admin-box full-width">
+
+                            <h3>
+                                Lista de usuarios
+                            </h3>
+
+                            <div class="orders-table-wrapper">
+
+                                <table class="orders-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>#</th>
+                                            <th>Nombre</th>
+                                            <th>Email</th>
+                                            <th>Rol</th>
+                                            <th>Dirección</th>
+                                            <th>Acciones</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="users-table-body"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="admin-box">
+
+                            <h3>
+                                Detalle del usuario
+                            </h3>
+
+                            <p
+                                id="user-detail-empty"
+                                class="empty-state"
+                            >
+                                Selecciona un usuario para ver el detalle.
+                            </p>
+
+
+                            <div
+                                id="user-detail-content"
+                                class="order-detail hidden"
+                            >
+
+                                <div class="order-detail-section">
+
+                                    <div class="order-detail-row">
+                                        <span class="order-detail-label">
+                                            Nombre:
+                                        </span>
+
+                                        <span
+                                            id="user-detail-nombre"
+                                            class="order-detail-value"
+                                        ></span>
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+                                        <span class="order-detail-label">
+                                            Email:
+                                        </span>
+
+                                        <span
+                                            id="user-detail-email"
+                                            class="order-detail-value"
+                                        ></span>
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+                                        <span class="order-detail-label">
+                                            Rol:
+                                        </span>
+
+                                        <span
+                                            id="user-detail-role"
+                                            class="order-detail-value"
+                                        ></span>
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+                                        <span class="order-detail-label">
+                                            Dirección:
+                                        </span>
+
+                                        <span
+                                            id="user-detail-direccion"
+                                            class="order-detail-value"
+                                        ></span>
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+                                        <span class="order-detail-label">
+                                            Ciudad:
+                                        </span>
+
+                                        <span
+                                            id="user-detail-ciudad"
+                                            class="order-detail-value"
+                                        ></span>
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+                                        <span class="order-detail-label">
+                                            Estado:
+                                        </span>
+
+                                        <span
+                                            id="user-detail-estado"
+                                            class="order-detail-value"
+                                        ></span>
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+                                        <span class="order-detail-label">
+                                            CP:
+                                        </span>
+
+                                        <span
+                                            id="user-detail-cp"
+                                            class="order-detail-value"
+                                        ></span>
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h4 class="section-subtitle-sm">
+                                        Pedidos realizados
+                                    </h4>
+
+                                    <div
+                                        id="user-orders-list"
+                                        class="user-orders-list"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="admin-box">
+
+                            <h3>
+                                Editar usuario
+                            </h3>
+
+                            <p
+                                id="user-edit-empty"
+                                class="empty-state"
+                            >
+                                Selecciona un usuario para editar.
+                            </p>
+
+
+                            <form
+                                id="user-edit-form"
+                                class="checkout-form hidden"
+                            >
+
+                                <div class="form-group">
+
+                                    <label for="edit-user-nombre">
+                                        Nombre completo
+                                    </label>
+
+                                    <input
+                                        id="edit-user-nombre"
+                                        name="nombre"
+                                        type="text"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="edit-user-email">
+                                        Correo electrónico
+                                    </label>
+
+                                    <input
+                                        id="edit-user-email"
+                                        name="email"
+                                        type="email"
+                                        required
+                                        readonly
+                                        class="readonly-input"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="edit-user-role">
+                                        Rol
+                                    </label>
+
+                                    <select
+                                        id="edit-user-role"
+                                        name="role"
+                                    >
+
+                                        <option value="Cliente">
+                                            Cliente
+                                        </option>
+
+                                        <option value="Admin">
+                                            Administrador
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="edit-user-direccion">
+                                        Dirección
+                                    </label>
+
+                                    <input
+                                        id="edit-user-direccion"
+                                        name="direccion"
+                                        type="text"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-row two-cols">
+
+                                    <div class="form-group">
+
+                                        <label for="edit-user-ciudad">
+                                            Ciudad
+                                        </label>
+
+                                        <input
+                                            id="edit-user-ciudad"
+                                            name="ciudad"
+                                            type="text"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="edit-user-estado">
+                                            Estado
+                                        </label>
+
+                                        <input
+                                            id="edit-user-estado"
+                                            name="estado"
+                                            type="text"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="edit-user-cp">
+                                        Código postal
+                                    </label>
+
+                                    <input
+                                        id="edit-user-cp"
+                                        name="cp"
+                                        type="text"
+                                    >
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    class="action-btn"
+                                >
+                                    Guardar cambios
+                                </button>
+
+
+                                <p
+                                    id="user-edit-message"
+                                    class="update-message"
+                                ></p>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     ADMINISTRACIÓN DE PEDIDOS
+                     ================================================== -->
+
+                <div
+                    id="view-admin"
+                    class="view-container hidden"
+                >
+
+                    <div class="section-header">
+
+                        <div>
+
+                            <h2
+                                id="admin-panel-title"
+                                class="section-title"
+                            >
+                                Panel de administración
+                            </h2>
+
+                            <p class="section-subtitle">
+                                Gestiona pedidos y revisa el estado de los envíos.
+                            </p>
+
+                        </div>
+
+
+                        <div class="admin-stats">
+
+                            <p>
+                                Pedidos totales:
+                                <span id="admin-orders-count">0</span>
+                            </p>
+
+                            <p>
+                                Total vendido:
+                                <span id="admin-orders-total">
+                                    $0.00 MXN
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4 mb-4 flex-wrap">
+
+                        <div class="search-container">
+
+                            <input
+                                id="order-search"
+                                type="text"
+                                placeholder="Buscar por ID de pedido o email..."
+                                class="w-full p-4 search-input"
+                            >
+
+                        </div>
+
+
+                        <select
+                            id="order-status-filter"
+                            class="select-filter user-select"
+                        >
+
+                            <option value="all">
+                                Todos los estados
+                            </option>
+
+                            <option value="Pendiente">
+                                Pendiente
+                            </option>
+
+                            <option value="Pagado">
+                                Pagado
+                            </option>
+
+                            <option value="Enviado">
+                                Enviado
+                            </option>
+
+                            <option value="Entregado">
+                                Entregado
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            id="export-orders-btn"
+                            type="button"
+                            class="action-btn export-btn"
+                        >
+                            📊 Exportar CSV
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="alerts-section"
+                        class="alerts-section"
+                        style="display: none;"
+                    >
+
+                        <div class="alerts-header">
+
+                            <svg
+                                class="alerts-icon"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+
+                            </svg>
+
+
+                            <h3 class="alerts-title">
+                                Envíos pendientes
+                            </h3>
+
+                        </div>
+
+
+                        <div
+                            id="alerts-list"
+                            class="alerts-list"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="admin-grid">
+
+                        <div class="admin-box">
+
+                            <h3>
+                                Pedidos recientes
+                            </h3>
+
+                            <div class="orders-table-wrapper">
+
+                                <table class="orders-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>#</th>
+                                            <th>Cliente</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                            <th>Fecha</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="admin-orders-body"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="admin-box">
+
+                            <h3>
+                                Detalle del pedido
+                            </h3>
+
+                            <p
+                                id="admin-order-empty"
+                                class="empty-state"
+                            >
+                                Selecciona un pedido para ver el detalle.
+                            </p>
+
+
+                            <div
+                                id="admin-order-detail"
+                                class="order-detail hidden"
+                            >
+
+                                <div class="order-detail-section">
+
+                                    <div class="order-detail-row">
+
+                                        <span class="order-detail-label">
+                                            Cliente:
+                                        </span>
+
+                                        <span
+                                            id="detail-nombre"
+                                            class="order-detail-value"
+                                        ></span>
+
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+
+                                        <span class="order-detail-label">
+                                            Email:
+                                        </span>
+
+                                        <span
+                                            id="detail-email"
+                                            class="order-detail-value"
+                                        ></span>
+
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+
+                                        <span class="order-detail-label">
+                                            Envío:
+                                        </span>
+
+                                        <span
+                                            id="detail-envio"
+                                            class="order-detail-value"
+                                        ></span>
+
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+
+                                        <span class="order-detail-label">
+                                            Pago:
+                                        </span>
+
+                                        <span
+                                            id="detail-pago"
+                                            class="order-detail-value"
+                                        ></span>
+
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+
+                                        <span class="order-detail-label">
+                                            Dirección:
+                                        </span>
+
+                                        <span
+                                            id="detail-direccion"
+                                            class="order-detail-value"
+                                        ></span>
+
+                                    </div>
+
+
+                                    <div class="order-detail-row">
+
+                                        <span class="order-detail-label">
+                                            Estado:
+                                        </span>
+
+
+                                        <select
+                                            id="detail-status"
+                                            class="order-detail-value status-select"
+                                        >
+
+                                            <option value="Pendiente">
+                                                Pendiente
+                                            </option>
+
+                                            <option value="Pagado">
+                                                Pagado
+                                            </option>
+
+                                            <option value="EnPreparacion">
+                                                En preparación
+                                            </option>
+
+                                            <option value="Enviado">
+                                                Enviado
+                                            </option>
+
+                                            <option value="Entregado">
+                                                Entregado
+                                            </option>
+
+                                            <option value="Cancelado">
+                                                Cancelado
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h4 class="section-subtitle-sm">
+                                        Productos
+                                    </h4>
+
+                                    <ul
+                                        id="detail-items"
+                                        class="order-items-list"
+                                    ></ul>
+
+                                </div>
+
+
+                                <div class="order-detail-total">
+
+                                    <span>
+                                        Total
+                                    </span>
+
+                                    <span id="detail-total"></span>
+
+                                </div>
+
+
+                                <button
+                                    id="btn-update-status"
+                                    type="button"
+                                    class="action-btn update-status-btn"
+                                >
+                                    Actualizar estado
+                                </button>
+
+
+                                <p
+                                    id="status-update-message"
+                                    class="update-message"
+                                ></p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==================================================
+                     ADMINISTRACIÓN DE PRODUCTOS
+                     ================================================== -->
+
+                <div
+                    id="view-products-admin"
+                    class="view-container hidden"
+                >
+
+                    <div class="section-header">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Gestión de productos
+                            </h2>
+
+                            <p class="section-subtitle">
+                                Administra tu inventario de productos físicos y digitales.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="admin-grid">
+
+
+                        <!-- LISTADO -->
+
+                        <div class="admin-box">
+
+                            <div class="flex justify-between items-center mb-4">
+
+                                <h3>
+                                    Inventario completo
+                                </h3>
+
+
+                                <button
+                                    id="btn-new-product-trigger"
+                                    class="secondary-btn"
+                                    type="button"
+                                >
+                                    + Nuevo
+                                </button>
+
+                            </div>
+
+
+                            <div class="orders-table-wrapper">
+
+                                <table class="orders-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                            <th>Tipo</th>
+                                            <th>Categoría</th>
+                                            <th>Stock</th>
+                                            <th>Descripción</th>
+                                            <th>Imagen</th>
+                                            <th style="text-align:right;">
+                                                Acciones
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody id="products-table-body"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FORMULARIO -->
+
+                        <div class="admin-box">
+
+                            <h3 id="product-form-title">
+                                Detalles del Producto
+                            </h3>
+
+
+                            <form
+                                id="product-form"
+                                class="admin-form"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    id="product-id"
+                                >
+
+
+                                <!-- NOMBRE -->
+
+                                <div class="form-group">
+
+                                    <label for="product-name">
+                                        Nombre
+                                    </label>
+
+                                    <input
+                                        id="product-name"
+                                        type="text"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- PRECIO + TIPO -->
+
+                                <div class="form-row two-cols">
+
+                                    <div class="form-group">
+
+                                        <label for="product-price">
+                                            Precio ($ MXN)
+                                        </label>
+
+                                        <input
+                                            id="product-price"
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label for="product-type">
+                                            Tipo
+                                        </label>
+
+                                        <select
+                                            id="product-type"
+                                            required
+                                        >
+
+                                            <option value="fisico">
+                                                Físico
+                                            </option>
+
+                                            <option value="digital">
+                                                Digital
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- CATEGORÍA -->
+
+                                <div class="form-group">
+
+                                    <label for="product-category">
+                                        Categoría
+                                    </label>
+
+                                    <input
+                                        id="product-category"
+                                        type="text"
+                                    >
+
+                                </div>
+
+
+                                <!-- STOCK -->
+
+                                <div class="form-group">
+
+                                    <label for="product-stock">
+                                        Stock
+                                    </label>
+
+                                    <input
+                                        id="product-stock"
+                                        type="number"
+                                        min="0"
+                                        value="10"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- DESCRIPCIÓN -->
+
+                                <div class="form-group">
+
+                                    <label for="product-description">
+                                        Descripción
+                                    </label>
+
+                                    <input
+                                        id="product-description"
+                                        type="text"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- IMAGEN -->
+
+                                <div class="form-group">
+
+                                    <label for="product-image">
+                                        URL Imagen
+                                    </label>
+
+                                    <input
+                                        id="product-image"
+                                        type="text"
+                                    >
+
+                                </div>
+
+
+                                <!-- PREVIEW -->
+
+                                <div class="form-group">
+
+                                    <img
+                                        id="product-image-preview"
+                                        style="max-width:100%; display:none; border-radius:10px;"
+                                        alt="Vista previa del producto"
+                                    >
+
+                                </div>
+
+
+                                <!-- BOTONES -->
+
+                                <div
+                                    style="
+                                        margin-top:20px;
+                                        display:flex;
+                                        gap:10px;
+                                    "
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="action-btn"
+                                        style="flex:2;"
+                                    >
+                                        Guardar Producto
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        id="btn-cancel-edit"
+                                        class="secondary-btn"
+                                        style="flex:1;"
+                                    >
+                                        Limpiar
+                                    </button>
+
+                                </div>
+
+
+                                <p
+                                    id="product-admin-message"
+                                    class="update-message"
+                                ></p>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ======================================================
+                 SIDEBAR CARRITO
+                 ====================================================== -->
+
+            <aside
+                id="cart-sidebar"
+                class="sidebar-section"
+                aria-label="Carrito de compras"
+            >
+
+                <div
+                    class="section-header"
+                    style="margin-bottom:0;"
+                >
+
+                    <div>
+
+                        <h2 class="sidebar-title">
+                            Carrito
+                        </h2>
+
+                        <p class="sidebar-subtitle">
+                            Ajusta cantidades antes de finalizar.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="btn-clear-cart"
+                        class="secondary-btn"
+                        type="button"
+                    >
+                        Vaciar
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="cart-items"
+                    class="cart-items-container"
+                ></div>
+
+
                 <div class="cart-summary">
-                  <div class="cart-summary-row">
-                    <span class="cart-summary-label">Subtotal</span>
-                    <span id="checkout-subtotal" class="cart-summary-value">$0.00 MXN</span>
-                  </div>
-                  <div class="cart-summary-row">
-                    <span class="cart-summary-label">Envío estimado</span>
-                    <span id="checkout-shipping" class="cart-summary-value">$0.00 MXN</span>
-                  </div>
-                  <div class="cart-summary-row cart-summary-total">
-                    <span>Total</span>
-                    <span id="checkout-total" class="cart-summary-value">$0.00 MXN</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="checkout-box">
-                <h3>Datos de envío</h3>
-                <form id="shipping-form" class="checkout-form">
-                  <div class="form-row two-cols">
-                    <div class="form-group">
-                      <label for="nombre">Nombre completo</label>
-                      <input id="nombre" name="nombre" type="text" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="email">Correo electrónico</label>
-                      <input id="email" name="email" type="email" required readonly>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="direccion">Dirección</label>
-                    <input id="direccion" name="direccion" type="text" required>
-                  </div>
-                  <div class="form-row three-cols">
-                    <div class="form-group">
-                      <label for="ciudad">Ciudad</label>
-                      <input id="ciudad" name="ciudad" type="text" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="estado">Estado / Provincia</label>
-                      <input id="estado" name="estado" type="text" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="cp">Código postal</label>
-                      <input id="cp" name="cp" type="text" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="envio">Método de envío</label>
-                    <select id="envio" name="envio">
-                      <option value="standard">Estándar (3-5 días) - $99 MXN</option>
-                      <option value="express">Express (1-2 días) - $169 MXN</option>
-                      <option value="digital">Solo productos digitales - $0 MXN</option>
-                    </select>
-                  </div>
-                  <div>
-                    <h4 class="payment-title">Método de pago</h4>
-                    <div class="payment-options">
-                      <label class="payment-option">
-                        <input type="radio" name="pago" value="tarjeta" checked>
-                        <span>Tarjeta de crédito/débito</span>
-                      </label>
-                      <label class="payment-option">
-                        <input type="radio" name="pago" value="oxxo">
-                        <span>OXXO</span>
-                      </label>
-                      <label class="payment-option">
-                        <input type="radio" name="pago" value="transferencia">
-                        <span>Transferencia bancaria</span>
-                      </label>
-                    </div>
-                  </div>
-                  <div id="payment-info" class="payment-info-box">
-                    <div id="dropin-container"></div>
-                  </div>
-                  <button type="submit" class="action-btn">Confirmar pedido</button>
-                  <p id="checkout-message" class="checkout-message"></p>
-                </form>
-              </div>
-            </div>
 
-            <div id="dropin-container"></div>
+                    <div class="cart-summary-row">
 
-          </div>
+                        <span class="cart-summary-label">
+                            Artículos
+                        </span>
 
-          <!-- VISTA USUARIOS -->
-          <div id="view-users" class="view-container hidden">
-            <div class="section-header">
-              <div>
-                <h2 class="section-title">Administración de usuarios</h2>
-                <p class="section-subtitle">Gestiona los clientes registrados en la plataforma.</p>
-              </div>
-              <div class="admin-stats">
-                <p>Total clientes: <span id="users-count">0</span></p>
-                <p>Total administradores: <span id="admins-count">0</span></p>
-              </div>
-            </div>
-            
-            <div class="flex gap-4 mb-4 flex-wrap">
-              <div class="search-container">
-                <input id="user-search" type="text" placeholder="Buscar por nombre o email..." class="w-full p-4 search-input">
-              </div>
-              
-              <select id="user-role-filter" class="select-filter user-select">
-                <option value="all">Todos los roles</option>
-                <option value="cliente">Solo clientes</option>
-                <option value="admin">Solo administradores</option>
-              </select>
-              
-              <button id="export-users-btn" type="button" class="action-btn export-btn">📊 Exportar CSV</button>
-            </div>
-            
-            <div class="admin-grid">
-              <div class="admin-box full-width">
-                <h3>Lista de usuarios</h3>
-                <div class="orders-table-wrapper">
-                  <table class="orders-table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Rol</th>
-                        <th>Dirección</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody id="users-table-body"></tbody>
-                  </table>
-                </div>
-              </div>
-              
-              <div class="admin-box">
-                <h3>Detalle del usuario</h3>
-                <p id="user-detail-empty" class="empty-state">Selecciona un usuario para ver el detalle.</p>
-                <div id="user-detail-content" class="order-detail hidden">
-                  <div class="order-detail-section">
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Nombre:</span>
-                      <span id="user-detail-nombre" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Email:</span>
-                      <span id="user-detail-email" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Rol:</span>
-                      <span id="user-detail-role" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Dirección:</span>
-                      <span id="user-detail-direccion" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Ciudad:</span>
-                      <span id="user-detail-ciudad" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Estado:</span>
-                      <span id="user-detail-estado" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">CP:</span>
-                      <span id="user-detail-cp" class="order-detail-value"></span>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 class="section-subtitle-sm">Pedidos realizados</h4>
-                    <div id="user-orders-list" class="user-orders-list"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="admin-box">
-                <h3>Editar usuario</h3>
-                <p id="user-edit-empty" class="empty-state">Selecciona un usuario para editar.</p>
-                <form id="user-edit-form" class="checkout-form hidden">
-                  <div class="form-group">
-                    <label for="edit-user-nombre">Nombre completo</label>
-                    <input id="edit-user-nombre" name="nombre" type="text" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="edit-user-email">Correo electrónico</label>
-                    <input id="edit-user-email" name="email" type="email" required readonly class="readonly-input">
-                  </div>
-                  <div class="form-group">
+                        <span
+                            id="cart-count"
+                            class="cart-summary-value"
+                        >
+                            0
+                        </span>
 
-                      <label for="edit-user-role">
-                          Rol
-                      </label>
-
-                      <select
-                          id="edit-user-role"
-                          name="role">
-
-                          <option value="Cliente">
-                              Cliente
-                          </option>
-
-                          <option value="Admin">
-                              Administrador
-                          </option>
-
-                      </select>
-
-                  </div>                  
-                  <div class="form-group">
-                    <label for="edit-user-direccion">Dirección</label>
-                    <input id="edit-user-direccion" name="direccion" type="text">
-                  </div>
-                  <div class="form-row two-cols">
-                    <div class="form-group">
-                      <label for="edit-user-ciudad">Ciudad</label>
-                      <input id="edit-user-ciudad" name="ciudad" type="text">
                     </div>
-                    <div class="form-group">
-                      <label for="edit-user-estado">Estado</label>
-                      <input id="edit-user-estado" name="estado" type="text">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="edit-user-cp">Código postal</label>
-                    <input id="edit-user-cp" name="cp" type="text">
-                  </div>
-                  <button type="submit" class="action-btn">Guardar cambios</button>
-                  <p id="user-edit-message" class="update-message"></p>
-                </form>
-              </div>
-            </div>
-          </div>
 
-          <!-- VISTA ADMIN -->
-          <div id="view-admin" class="view-container hidden">
-            <div class="section-header">
-              <div>
-                <h2 id="admin-panel-title" class="section-title">Panel de administración</h2>
-                <p class="section-subtitle">Gestiona pedidos y revisa el estado de los envíos.</p>
-              </div>
-              <div class="admin-stats">
-                <p>Pedidos totales: <span id="admin-orders-count">0</span></p>
-                <p>Total vendido: <span id="admin-orders-total">$0.00 MXN</span></p>
-              </div>
 
-     
+                    <div class="cart-summary-row cart-summary-total">
 
-              
-            </div>
-            
-            <div class="flex gap-4 mb-4 flex-wrap">
-              <div class="search-container">
-                <input id="order-search" type="text" placeholder="Buscar por ID de pedido o email..." class="w-full p-4 search-input">
-              </div>
-              
-              <select id="order-status-filter" class="select-filter user-select">
-                <option value="all">Todos los estados</option>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Pagado">Pagado</option>
-                <option value="Enviado">Enviado</option>
-                <option value="Entregado">Entregado</option>
-              </select>
-              
-              <button id="export-orders-btn" type="button" class="action-btn export-btn">📊 Exportar CSV</button>
-            </div>
-            
-            <div id="alerts-section" class="alerts-section" style="display: none;">
-              <div class="alerts-header">
-                <svg class="alerts-icon" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                </svg>
-                <h3 class="alerts-title">Envíos pendientes</h3>
-              </div>
-              <div id="alerts-list" class="alerts-list"></div>
-            </div>
-            
-            <div class="admin-grid">
-              <div class="admin-box">
-                <h3>Pedidos recientes</h3>
-                <div class="orders-table-wrapper">
-                  <table class="orders-table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                      </tr>
-                    </thead>
-                    <tbody id="admin-orders-body"></tbody>
-                  </table>
-                </div>
-              </div>
-              
-              <div class="admin-box">
-                <h3>Detalle del pedido</h3>
-                <p id="admin-order-empty" class="empty-state">Selecciona un pedido para ver el detalle.</p>
-                <div id="admin-order-detail" class="order-detail hidden">
-                  <div class="order-detail-section">
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Cliente:</span>
-                      <span id="detail-nombre" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Email:</span>
-                      <span id="detail-email" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Envío:</span>
-                      <span id="detail-envio" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Pago:</span>
-                      <span id="detail-pago" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Dirección:</span>
-                      <span id="detail-direccion" class="order-detail-value"></span>
-                    </div>
-                    <div class="order-detail-row">
-                      <span class="order-detail-label">Estado:</span>
-                      <select id="detail-status" class="order-detail-value status-select">
-                          <option value="Pendiente">Pendiente</option>
-                          <option value="Pagado">Pagado</option>
-                          <option value="EnPreparacion">En preparación</option>
-                          <option value="Enviado">Enviado</option>
-                          <option value="Entregado">Entregado</option>
-                          <option value="Cancelado">Cancelado</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 class="section-subtitle-sm">Productos</h4>
-                    <ul id="detail-items" class="order-items-list"></ul>
-                  </div>
-                  <div class="order-detail-total">
-                    <span>Total</span>
-                    <span id="detail-total"></span>
-                  </div>
-                  <button id="btn-update-status" type="button" class="action-btn update-status-btn">Actualizar estado</button>
-                  <p id="status-update-message" class="update-message"></p>
-                </div>
-              </div>
-            </div>
-          </div>
+                        <span>
+                            Total
+                        </span>
 
-          <!-- VISTA PRODUCTOS ADMIN -->
-          <div id="view-products-admin" class="view-container hidden">
-            <div class="section-header">
-              <div>
-                <h2 class="section-title">Gestión de productos</h2>
-                <p class="section-subtitle">Administra tu inventario de productos físicos y digitales.</p>
-              </div>
-            </div>
+                        <span
+                            id="cart-total"
+                            class="cart-summary-value"
+                        >
+                            $0.00 MXN
+                        </span>
 
-            <div class="admin-grid">
+                    </div>
 
-              <!-- LISTADO -->
-              <div class="admin-box">
-                <div class="flex justify-between items-center mb-4">
-                  <h3>Inventario completo</h3>
-                  <button id="btn-new-product-trigger" class="secondary-btn" type="button">
-                    + Nuevo
-                  </button>
                 </div>
 
-                <div class="orders-table-wrapper">
-                  <table class="orders-table">
-                    <thead>
-                      <tr>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Tipo</th>
-                        <th>Categoría</th>
-                        <th>Stock</th>
-                        <th>Descripción</th>
-                        <th>Imagen</th>
-                        <th style="text-align: right;">Acciones</th>
-                      </tr>
-                    </thead>
 
-                    <tbody id="products-table-body"></tbody>
-                  </table>
-                </div>
-              </div>
+                <button
+                    id="go-to-checkout"
+                    class="primary-btn"
+                    type="button"
+                >
+                    Ir al checkout
+                </button>
 
-              <!-- FORMULARIO -->
-              <div class="admin-box">
-                <h3 id="product-form-title">Detalles del Producto</h3>
+            </aside>
 
-                <form id="product-form" class="admin-form">
-                  <input type="hidden" id="product-id">
+        </div>
 
-                  <!-- NOMBRE -->
-                  <div class="form-group">
-                    <label>Nombre</label>
-                    <input id="product-name" type="text" required>
-                  </div>
-
-                  <!-- PRECIO + TIPO -->
-                  <div class="form-row two-cols">
-                    <div class="form-group">
-                      <label>Precio ($ MXN)</label>
-                      <input id="product-price" type="number" step="0.01" min="0" required>
-                    </div>
-
-                    <div class="form-group">
-                      <label>Tipo</label>
-                      <select id="product-type" required>
-                        <option value="fisico">Físico</option>
-                        <option value="digital">Digital</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <!-- CATEGORÍA -->
-                  <div class="form-group">
-                    <label>Categoría</label>
-                    <input id="product-category" type="text">
-                  </div>
-
-                  <!-- STOCK -->
-                  <div class="form-group">
-                    <label>Stock</label>
-                    <input id="product-stock" type="number" min="0" value="10" required>
-                  </div>
-
-                  <!-- DESCRIPCIÓN -->
-                  <div class="form-group">
-                    <label>Descripción</label>
-                    <input id="product-description" type="text" required>
-                  </div>
-
-                  <!-- IMAGEN -->
-                  <div class="form-group">
-                    <label>URL Imagen</label>
-                    <input id="product-image" type="text">
-                  </div>
-
-                  <!-- PREVIEW -->
-                  <div class="form-group">
-                    <img id="product-image-preview"
-                        style="max-width:100%; display:none; border-radius:10px;">
-                  </div>
-
-                  <!-- BOTONES -->
-                  <div style="margin-top: 20px; display: flex; gap: 10px;">
-                    <button type="submit" class="action-btn" style="flex: 2;">
-                      Guardar Producto
-                    </button>
-
-                    <button type="button" id="btn-cancel-edit" class="secondary-btn" style="flex: 1;">
-                      Limpiar
-                    </button>
-                  </div>
-
-                  <p id="product-admin-message" class="update-message"></p>
-                </form>
-
-              </div>
-            </div>
-          </div>
-
-        </section>
-
-        <!-- SIDEBAR CARRITO -->
-        <aside id="cart-sidebar" class="sidebar-section" aria-label="Carrito de compras">
-          <div class="section-header" style="margin-bottom: 0;">
-            <div>
-              <h2 class="sidebar-title">Carrito</h2>
-              <p class="sidebar-subtitle">Ajusta cantidades antes de finalizar.</p>
-            </div>
-            <button id="btn-clear-cart" class="secondary-btn" type="button">Vaciar</button>
-          </div>
-          <div id="cart-items" class="cart-items-container"></div>
-          <div class="cart-summary">
-            <div class="cart-summary-row">
-              <span class="cart-summary-label">Artículos</span>
-              <span id="cart-count" class="cart-summary-value">0</span>
-            </div>
-            <div class="cart-summary-row cart-summary-total">
-              <span>Total</span>
-              <span id="cart-total" class="cart-summary-value">$0.00 MXN</span>
-            </div>
-          </div>
-          <button id="go-to-checkout" class="primary-btn" type="button">Ir al checkout</button>
-        </aside>
-        
-      </div>
     </main>
 
-    <!-- FOOTER -->
+
+
+    <!-- ======================================================
+         FOOTER
+         ====================================================== -->
+
     <footer class="main-footer">
-      <div class="footer-content">
-        <p id="footer-text">© 2025 Mi tienda en línea</p>
-        <p class="footer-disclaimer">Sistema de gestión de pedidos con autenticación.</p>
-      </div>
+
+        <div class="footer-content">
+
+            <p id="footer-text">
+                © 2025 Mi tienda en línea
+            </p>
+
+            <p class="footer-disclaimer">
+                Sistema de gestión de pedidos con autenticación.
+            </p>
+
+        </div>
+
     </footer>
-  </div>
-  
-  <!-- El nonce debe coincidir con el que envía el servidor en la cabecera HTTP -->
+
+</div>
 
 
-<!-- Elimina el nonce por completo -->
-<script nonce="NONCE_PLACEHOLDER" src="https://sdk.mercadopago.com/js/v2"></script>
 
-<!-- Braintree SDK -->
-<script src="https://js.braintreegateway.com/web/3.111.0/js/client.min.js"></script>
+<!-- ============================================================
+     MERCADO PAGO
+     ============================================================ -->
 
-<script src="https://js.braintreegateway.com/web/3.111.0/js/hosted-fields.min.js"></script>
+<script
+    nonce="NONCE_PLACEHOLDER"
+    src="https://sdk.mercadopago.com/js/v2"
+></script>
 
-<script src="https://js.braintreegateway.com/web/dropin/1.45.2/js/dropin.min.js"></script>
 
-<script nonce="NONCE_PLACEHOLDER" src="script.js"></script>
+<!-- ============================================================
+     BRAINTREE
+     ============================================================ -->
 
+<script
+    src="https://js.braintreegateway.com/web/3.111.0/js/client.min.js"
+></script>
+
+
+<script
+    src="https://js.braintreegateway.com/web/3.111.0/js/hosted-fields.min.js"
+></script>
+
+
+<script
+    src="https://js.braintreegateway.com/web/dropin/1.45.2/js/dropin.min.js"
+></script>
+
+
+<!-- ============================================================
+     JAVASCRIPT DE LA TIENDA
+     ============================================================ -->
+
+<script
+    nonce="NONCE_PLACEHOLDER"
+    src="script.js"
+></script>
 
 
 </body>
+
 </html>
